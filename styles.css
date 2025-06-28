@@ -1,0 +1,84 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f8ff;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: #4a4a4a;
+}
+
+.key-options, .level-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+}
+
+.key-options a, .level-options a {
+    margin: 10px;
+    padding: 15px 25px;
+    background-color: #6a5acd;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+.key-options a:hover, .level-options a:hover {
+    background-color: #483d8b;
+}
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Vert */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#feedback {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#note-display {
+    margin-bottom: 20px;
+}
+
+#note-display img {
+    max-width: 100px;
+    height: auto;
+}
+
+#progress-container {
+    width: 100%;
+    background-color: #ddd;
+    margin-top: 20px;
+}
+
+#progress-bar {
+    width: 0%;
+    height: 30px;
+    background-color: #4CAF50;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+}
+
+#score-display {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
