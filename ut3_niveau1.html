@@ -8,17 +8,41 @@
 </head>
 <body>
     <h1>Niveau 1 - Clé d'Ut3</h1>
-    <div id="note-display">
-        <img id="note-image" src="" alt="Note">
+    <div id="note-reference">
+        <h2>Voici les quatre notes repères :</h2>
+        <div class="note">
+            <img src="Images/ut3/C4.png" alt="Do4">
+            <p>Do</p>
+        </div>
+        <div class="note">
+            <img src="Images/ut3/C3.png" alt="Do3">
+            <p>Do</p>
+        </div>
+        <div class="note">
+            <img src="Images/ut3/G4.png" alt="Sol4">
+            <p>Sol</p>
+        </div>
+        <div class="note">
+            <img src="Images/ut3/F3.png" alt="Fa3">
+            <p>Fa</p>
+        </div>
+        <button id="start-quiz">Commencer le Quiz</button>
     </div>
-    <div id="game-container">
-        <!-- Les boutons de choix des notes seront générés ici -->
+
+    <div id="quiz-section" style="display: none;">
+        <div id="note-display">
+            <img id="note-image" src="" alt="Note">
+        </div>
+        <div id="game-container">
+            <!-- Les boutons de choix des notes seront générés ici -->
+        </div>
+        <div id="feedback"></div>
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+        <div id="score-display"></div>
     </div>
-    <div id="feedback"></div>
-    <div id="progress-container">
-        <div id="progress-bar"></div>
-    </div>
-    <div id="score-display"></div>
+
     <script src="ut3_niveau1.js"></script>
 </body>
 </html>
