@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Noms des notes repères
+    // Noms des notes repères corrigés
     const notesRepaires = ['Do4', 'Do3', 'Sol4', 'Fa3'];
     const noteToImage = {
         'Do4': 'C4.png',
@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fonction pour vérifier la réponse
     function checkAnswer(selectedButton) {
-        // Vérifie si la note actuelle est un "Do" lorsque "Do" est sélectionné
         const isCorrect = checkIfCorrect(selectedButton, currentNote);
 
         if (isCorrect) {
@@ -74,11 +73,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fonction pour vérifier si la réponse est correcte
     function checkIfCorrect(selectedButton, currentNote) {
-        // Pour "Do", nous vérifions si c'est Do4 ou Do3
         if (selectedButton === 'Do' && (currentNote === 'Do4' || currentNote === 'Do3')) {
             return true;
         }
-        // Pour les autres notes, la correspondance est directe (sans le numéro)
         return selectedButton === currentNote.replace(/[0-9]/g, '');
     }
 
@@ -101,7 +98,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Initialiser le jeu
-    updateNoteDisplay();
-    createNoteButtons();
+    // Gérer le clic sur le bouton pour démarrer le quiz
+    document.getElementById('start-quiz').addEventListener('click', function() {
+        document.getElementById('note-reference').style.display = 'none';
+        document.getElementById('quiz-section').style.display = 'block';
+        updateNoteDisplay();
+        createNoteButtons(); // Assurez-vous que les boutons sont générés ici
+    });
 });
