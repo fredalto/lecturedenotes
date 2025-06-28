@@ -6,30 +6,23 @@ body {
     padding: 0;
 }
 
-h1 {
+h1, h2 {
     color: #4a4a4a;
 }
 
-.key-options, .level-options {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 50vh;
+#note-reference {
+    margin-bottom: 20px;
 }
 
-.key-options a, .level-options a {
+.note {
+    display: inline-block;
     margin: 10px;
-    padding: 15px 25px;
-    background-color: #6a5acd;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 18px;
+    text-align: center;
 }
 
-.key-options a:hover, .level-options a:hover {
-    background-color: #483d8b;
+.note img {
+    width: 100px; /* Ajustez selon la taille de vos images */
+    height: auto;
 }
 
 button {
