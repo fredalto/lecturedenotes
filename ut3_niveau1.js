@@ -89,7 +89,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fonction pour terminer le jeu et afficher le score final
     function endGame() {
         scoreDisplay.textContent = `Score final : ${score}/${totalQuestions}`;
-        feedback.textContent = ''; // Efface le feedback précédent
+        feedback.textContent = '';
+    document.getElementById('end-buttons').style.display = 'block';
+    document.getElementById('end-buttons').style.display = 'block'; // Efface le feedback précédent
 
         // Désactiver les boutons après la fin du jeu
         const buttons = document.querySelectorAll('#game-container button');
