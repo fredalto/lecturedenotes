@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Niveau 2 - Clé d'Ut3</title>
+<link href="styles.css" rel="stylesheet"/>
+</head>
+<body>
+<h1>Niveau 2 - Clé d'Ut3</h1>
+<div id="note-reference">
+<h2>Voici les notes repères :</h2>
+<p>Dans ce niveau, vous verrez également les notes conjointes aux notes repères.</p>
+<div class="note">
+<img alt="Do4" src="Images/ut3/C4.png"/>
+<p>Do</p>
+</div>
+<div class="note">
+<img alt="Do3" src="Images/ut3/C3.png"/>
+<p>Do</p>
+</div>
+<div class="note">
+<img alt="Sol4" src="Images/ut3/G4.png"/>
+<p>Sol</p>
+</div>
+<div class="note">
+<img alt="Fa3" src="Images/ut3/F3.png"/>
+<p>Fa</p>
+</div>
+<button id="start-quiz">Commencer le Quiz</button>
+</div>
+<div id="quiz-section" style="display: none;">
+<div id="note-display">
+<img alt="Note" id="note-image" src=""/>
+</div>
+<div id="game-container">
+<!-- Les boutons de choix des notes seront générés ici -->
+</div>
+<div id="feedback"></div>
+<div id="progress-container">
+<div id="progress-bar"></div>
+</div>
+<div id="score-display"></div>
+</div>
+<script src="ut3_niveau2.js"></script>
+<div id="end-buttons" style="display: none;">
+<button onclick="window.location.reload();">
+Recommencer le niveau
+</button>
+<button onclick="window.location.href='index.html';">
+Revenir à l'accueil
+</button>
+</div>
+</body>
+</html>
