@@ -1,17 +1,17 @@
 const notesRepereEtConjointes = {
-  "C4": { nom: "Do", conjointes: ["B3", "D4"] },
-  "G4": { nom: "Sol", conjointes: ["F4", "A4"] },
-  "C3": { nom: "Do", conjointes: ["B2", "D3"] },
-  "F3": { nom: "Fa", conjointes: ["G3", "E3"] }
-};
-  
-const noteToNom = {
-  "C4": "Do", "B3": "Si", "D4": "Ré", 
-  "G4": "Sol", "F4": "Fa",  "A4": "La",
-  "C3": "Do", "B2": "Si", "D3": "Ré",
-  "F3": "Fa", "G3": "Sol", "E3": "Mi"
+  "C4": { nom: "Do", conjointes: ["A3", "E4"] },
+  "F4": { nom: "Fa", conjointes: ["A4", "D4"] },
+  "D3": { nom: "Ré", conjointes: ["B2", "F3"] },
+  "G3": { nom: "Sol", conjointes: ["B3", "E3"] }
 };
 
+const noteToNom = {
+  "C4": "Do", "A3": "La","E4": "Mi",
+  "F4": "Fa", "A4": "La","D4": "Ré",
+  "D3": "Ré", "B2": "Si", "F3": "Fa",
+  "G3": "Sol", "B3": "Si", "E3": "Mi"
+};
+  
 const reponses = ["Do", "Ré", "Mi", "Fa", "Sol", "La", "Si"];
 
 let score = 0, total = 10, current = 0, quizNotes = [], correct = "", scoreEnvoye = false;
@@ -67,7 +67,7 @@ function nextNote() {
 
   const note = quizNotes[current];
   correct = note.nom;
-  noteImg.src = "Images/ut3/" + note.img;
+  noteImg.src = "Images/ut4/" + note.img;
   container.innerHTML = "";
   enableButtons();
   feedback.textContent = "";
@@ -157,7 +157,7 @@ if (btnN1) {
   btnN1.classList.add("hidden");       // reset à chaque fin de quiz
   if (pct < 25) btnN1.classList.remove("hidden");
 }
-  // -- Visibilité du bouton "Niveau 3" : visible seulement si pct ≥ 75 %
+  // -- Visibilité du bouton "Niveau 4" : visible seulement si pct ≥ 75 %
 const btnN3 = document.getElementById("niveau-suivant");
 if (btnN3) {
   btnN3.classList.add("hidden");        // on repart caché à chaque fin de quiz
@@ -225,7 +225,7 @@ function envoyerScore() {
   data.append("prof", prof);
   data.append("exercice", "Lecture de notes");
   data.append("type", "Clé");
-  data.append("niveau", "ut3_niveau2");
+  data.append("niveau", "ut4_niveau3");
   data.append("score20", score20);
   data.append("scorePct", pourcentage);
 
@@ -269,21 +269,23 @@ function enableButtons() {
 (function preloadAssets() {
   // Images
   const images = [
-    "C4.png", "G4.png", "C3.png", "F3.png",
-    "B3.png", "F4.png", "D4.png", "A4.png",
-    "B2.png", "D3.png", "G3.png", "E3.png"
-  ].map(n => "Images/ut3/" + n);
+  "C4.png", "A3.png", "E4.png",
+  "F4.png", "A4.png", "D4.png",
+  "D3.png", "B2.png", "F3.png",
+  "G3.png", "B3.png", "E3.png"
+  ].map(n => "Images/ut4/" + n);
 
   images.forEach(src => { const img = new Image(); img.src = src; });
 
   // Sons
   const sons = [
     "duck.mp3",
-    "C4.mp3", "G4.mp3", "C3.mp3", "F3.mp3",
-    "B3.mp3", "F4.mp3", "D4.mp3", "A4.mp3",
-    "B2.mp3", "D3.mp3", "G3.mp3", "E3.mp3"
+  "C4.mp3", "A3.mp3", "E4.mp3",
+  "F4.mp3", "A4.mp3", "D4.mp3",
+  "D3.mp3", "B2.mp3", "F3.mp3",
+  "G3.mp3", "B3.mp3", "E3.mp3"
   ].map(n => "sounds/" + n);
-
+  
   sons.forEach(src => { const a = new Audio(); a.preload = "auto"; a.src = src; });
 })();
 

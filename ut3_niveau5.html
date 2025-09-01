@@ -1,19 +1,44 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lecture de Notes Ut3 Niveau1</title>
+  <title>Lecture de Notes – Niveau 5</title>
   <link rel="stylesheet" href="unified.css">
   <style>
     .note img { max-width: 100px; height: auto; margin: 10px; }
-    .note { display: inline-block; text-align: center; margin: 10px; }
+    .intro-notes img { max-width: 60px; }
+    .intro-notes {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .note-line {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+    }
+    .note {
+      display: inline-block;
+      text-align: center;
+      margin: 4px;
+    }
+    .note p {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.1;
+    }
     #feedback { font-size: 24px; font-weight: bold; margin-top: 20px; min-height: 40px; transition: color 0.3s ease; }
     #feedback.correct { color: green; }
     #feedback.incorrect { color: red; }
     #progress-container { width: 100%; background-color: #ddd; border-radius: 10px; margin-top: 20px; height: 20px; }
     #progress-bar { height: 100%; width: 0%; background-color: #4CAF50; border-radius: 10px; transition: width 0.4s ease-in-out; }
     #score-display { font-size: 28px; font-weight: bold; margin-top: 20px; }
+    #final-message { font-size: 18px; margin-top: 20px; }
     .gold-button {
       background: linear-gradient(to bottom right, #FFD700, #FFA500);
       color: black;
@@ -26,28 +51,36 @@
 </head>
 <body>
   <h1>Lecture de Notes Express</h1>
-
   <div class="section">
   <div class="section-topbar">
-  <a class="home-link" href="index.html" aria-label="Revenir à l'accueil">🏠 Accueil</a>
-</div>
+    <a class="home-link" href="index.html" aria-label="Revenir à l'accueil">🏠 Accueil</a>
+  </div>
 
-    <h2 style="color: red;">Niveau 1 - Clé d'Ut3</h2>
+    <h2 style="color: red;">Niveau 5 - Clé d'ut3</h2>
 
     <div id="note-reference">
-      <h2>Voici les quatre notes repères :</h2>
+  <h2>🎯 Ce quiz utilise toutes les notes de la clé de sol, de Fa3 à Mi6.</h2>
+  <p>Les <strong>notes repères</strong> ci-dessous peuvent t’aider à mieux te repérer :</p>
+
+  <div class="intro-notes">
+    <div class="note-line">
       <div class="note"><img alt="Do4" src="Images/ut3/C4.png"/><p>Do</p></div>
       <div class="note"><img alt="Sol4" src="Images/ut3/G4.png"/><p>Sol</p></div>
       <div class="note"><img alt="Do3" src="Images/ut3/C3.png"/><p>Do</p></div>
       <div class="note"><img alt="Fa3" src="Images/ut3/F3.png"/><p>Fa</p></div>
-      <button class="button" id="start-quiz">Commencer le Quiz</button>
-      <p style="margin-top: 10px; font-size: 14px; color: #555;">
-  💡 Astuce : Vous pouvez aussi répondre avec le clavier !<br>
-  <small>C = Do, F = Fa, G = Sol</small>
-</p>
     </div>
+  </div>
 
-    <div id="quiz-section" style="display: none;">
+  <button class="button" id="start-quiz">Commencer le Quiz</button>
+
+  <p style="margin-top: 10px; font-size: 14px; color: #555;">
+    💡 Astuce : Vous pouvez aussi répondre avec le clavier !<br>
+    <small>C = Do, D = Ré, E = Mi, F = Fa, G = Sol, A = La, B = Si</small>
+  </p>
+</div>
+
+
+    <div id="quiz-section" class="hidden">
       <div id="note-display"><img alt="Note" id="note-image" src=""/></div>
       <div id="game-container"></div>
       <div id="feedback"></div>
@@ -55,17 +88,20 @@
       <div id="score-display"></div>
     </div>
 
-    <div id="end-buttons" style="display: none;">
-      <button class="button" onclick="window.location.reload();">Recommencer le niveau</button>
+    <div id="final-message"></div>
+
+    <div id="end-buttons" class="hidden">
+    <button class="button red-button hidden" id="niveau-1" onclick="window.location.href='sol_niveau4.html';">Niveau 4</button>
+      <button class="button" onclick="window.location.href = window.location.pathname + '?restart=' + Date.now();">Recommencer le niveau</button>
       <button class="button" onclick="window.location.href='index.html';">Revenir à l'accueil</button>
+      <button class="button gold-button hidden" id="niveau-suivant" onclick="window.location.href='defis_sol.html';">Défis</button>
     </div>
 
-    <!-- Formulaire d'envoi -->
-    <div id="send-score" style="display: none; margin-top: 30px;">
+   <div id="send-score" class="hidden" style="margin-top: 30px;">
       <h3>Envoyer mon score au professeur</h3>
-      <input type="text" id="prenom" placeholder="Prénom" required style="margin: 5px;" />
-      <input type="text" id="nom" placeholder="Nom" required style="margin: 5px;" />
-      <select id="prof" required style="margin: 5px; padding: 5px;">
+      <input type="text" id="prenom" placeholder="Prénom" autocomplete="off" required style="margin: 5px;" />
+      <input type="text" id="nom" placeholder="Nom" autocomplete="off" required style="margin: 5px;" />
+      <select id="prof" autocomplete="off" required style="margin: 5px; padding: 5px;">
         <option value="">Choisir un professeur</option>
         <option value="Barbara">Barbara</option>
         <option value="Benoit">Benoit</option>
@@ -76,16 +112,12 @@
         <option value="Thomas">Thomas</option>
       </select>
       <br>
-      <button class="button" onclick="envoyerScore()">Envoyer</button>
+      <button class="button" id="btn-envoyer-score">Envoyer</button>
       <p id="confirmation" style="margin-top:10px; font-weight: bold;"></p>
-      <p id="loading-message" style="display: none; color: blue; font-weight: bold;">⏳ Envoi en cours...</p>
+      <p id="loading-message" class="hidden">⏳ Envoi en cours...</p>
     </div>
   </div>
 
-  <!-- Iframe invisible pour envoyer les données -->
-  <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-
-  <script src="ut3_niveau1.js"></script>
+  <script src="ut3_niveau5.js"></script>
 </body>
 </html>
-

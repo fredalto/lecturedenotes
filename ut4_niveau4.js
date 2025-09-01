@@ -1,20 +1,23 @@
 const notesRepereEtConjointes = {
-  "C4": { nom: "Do", conjointes: ["B3", "D4"] },
-  "G4": { nom: "Sol", conjointes: ["F4", "A4"] },
-  "C3": { nom: "Do", conjointes: ["B2", "D3"] },
-  "F3": { nom: "Fa", conjointes: ["G3", "E3"] }
+  "C4": { nom: "Do", conjointes: ["B3", "D4"], tierces: ["A3", "E4"] },
+  "F4": { nom: "Fa", conjointes: ["G4", "E4"], tierces: ["A4", "D4"] },
+  "D3": { nom: "Ré", conjointes: ["C3", "E3"], tierces: ["B2", "F3"] },
+  "G3": { nom: "Sol", conjointes: ["A3", "F3"], tierces: ["B3", "E3"] }
 };
+
   
 const noteToNom = {
-  "C4": "Do", "B3": "Si", "D4": "Ré", 
-  "G4": "Sol", "F4": "Fa",  "A4": "La",
-  "C3": "Do", "B2": "Si", "D3": "Ré",
-  "F3": "Fa", "G3": "Sol", "E3": "Mi"
+  "C4": "Do", "B3": "Si", "A3": "La", "D4": "Ré", "E4": "Mi",
+  "F4": "Fa", "G4": "Sol", "A4": "La", "E4": "Mi", "D4": "Ré",
+  "D3": "Ré", "C3": "Do", "B2": "Si", "E3": "Mi", "F3": "Fa",
+  "G3": "Sol", "A3": "La", "B3": "Si", "F3": "Fa", "E3": "Mi"
 };
 
+
+    
 const reponses = ["Do", "Ré", "Mi", "Fa", "Sol", "La", "Si"];
 
-let score = 0, total = 10, current = 0, quizNotes = [], correct = "", scoreEnvoye = false;
+let score = 0, total = 20, current = 0, quizNotes = [], correct = "", scoreEnvoye = false;
 
 
 const startBtn = document.getElementById("start-quiz");
@@ -41,21 +44,48 @@ startBtn.onclick = () => {
 function generateSequence() {
   const repereKeys = Object.keys(notesRepereEtConjointes);
   const result = [];
-  let prevRepere = null; 
-  for (let i = 0; i < total; i++) {
-    if (i % 2 === 0) {
-const candidats = prevRepere
+  let prevRepere = null;
+
+  while (result.length < total) {
+    const index = result.length;
+
+    if (index % 2 === 0) {
+      // Étape paire : choisir une nouvelle note repère ≠ dernier repère
+      const candidats = prevRepere
         ? repereKeys.filter(r => r !== prevRepere)
-        : repereKeys.slice(); 
+        : repereKeys.slice();
       const r = candidats[Math.floor(Math.random() * candidats.length)];
-      result.push({ code: r, nom: noteToNom[r], img: r + ".png", repere: r });
-      prevRepere = r; 
+
+      result.push({
+        type: "repere",
+        code: r,
+        nom: noteToNom[r],
+        img: r + ".png",
+        repere: r
+      });
+
+      prevRepere = r;
     } else {
-      const conj = notesRepereEtConjointes[prevRepere].conjointes;
-      const c = conj[Math.floor(Math.random() * conj.length)];
-      result.push({ code: c, nom: noteToNom[c], img: c + ".png", repere: prevRepere });
+      // Étape impaire : choisir une conjointe OU tierce du dernier repère
+      const { conjointes, tierces } = notesRepereEtConjointes[prevRepere];
+
+// Choix aléatoire équilibré entre conjointe et tierce
+const utiliserTierce = Math.random() < 0.5 && tierces.length > 0;
+const liste = utiliserTierce ? tierces : conjointes;
+
+const v = liste[Math.floor(Math.random() * liste.length)];
+
+
+      result.push({
+        type: "voisine",
+        code: v,
+        nom: noteToNom[v],
+        img: v + ".png",
+        repere: prevRepere
+      });
     }
   }
+
   return result;
 }
 
@@ -67,7 +97,7 @@ function nextNote() {
 
   const note = quizNotes[current];
   correct = note.nom;
-  noteImg.src = "Images/ut3/" + note.img;
+  noteImg.src = "Images/ut4/" + note.img;
   container.innerHTML = "";
   enableButtons();
   feedback.textContent = "";
@@ -157,7 +187,7 @@ if (btnN1) {
   btnN1.classList.add("hidden");       // reset à chaque fin de quiz
   if (pct < 25) btnN1.classList.remove("hidden");
 }
-  // -- Visibilité du bouton "Niveau 3" : visible seulement si pct ≥ 75 %
+  // -- Visibilité du bouton "Niveau 4" : visible seulement si pct ≥ 75 %
 const btnN3 = document.getElementById("niveau-suivant");
 if (btnN3) {
   btnN3.classList.add("hidden");        // on repart caché à chaque fin de quiz
@@ -204,7 +234,7 @@ function envoyerScore() {
   const prenom = document.getElementById("prenom").value.trim();
   const nom = document.getElementById("nom").value.trim();
   const prof = document.getElementById("prof").value.trim();
-  const score20 = score * 2;
+  const score20 = score ;
   const pourcentage = Math.round((score / total) * 100);
   const confirmation = document.getElementById("confirmation");
   const bouton = document.querySelector("#send-score button");
@@ -225,7 +255,7 @@ function envoyerScore() {
   data.append("prof", prof);
   data.append("exercice", "Lecture de notes");
   data.append("type", "Clé");
-  data.append("niveau", "ut3_niveau2");
+  data.append("niveau", "ut4_niveau4");
   data.append("score20", score20);
   data.append("scorePct", pourcentage);
 
@@ -269,19 +299,22 @@ function enableButtons() {
 (function preloadAssets() {
   // Images
   const images = [
-    "C4.png", "G4.png", "C3.png", "F3.png",
-    "B3.png", "F4.png", "D4.png", "A4.png",
-    "B2.png", "D3.png", "G3.png", "E3.png"
-  ].map(n => "Images/ut3/" + n);
+  "C4.png", "B3.png", "A3.png", "D4.png", "E4.png",
+  "F4.png", "G4.png", "A4.png", "E4.png", "D4.png",
+  "D3.png", "C3.png", "B2.png", "E3.png", "F3.png",
+  "G3.png", "A3.png", "B3.png", "F3.png", "E3.png"
+  ].map(n => "Images/ut4/" + n);
 
+ 
   images.forEach(src => { const img = new Image(); img.src = src; });
 
   // Sons
   const sons = [
     "duck.mp3",
-    "C4.mp3", "G4.mp3", "C3.mp3", "F3.mp3",
-    "B3.mp3", "F4.mp3", "D4.mp3", "A4.mp3",
-    "B2.mp3", "D3.mp3", "G3.mp3", "E3.mp3"
+  "C4.mp3", "B3.mp3", "A3.mp3", "D4.mp3", "E4.mp3",
+  "F4.mp3", "G4.mp3", "A4.mp3", "E4.mp3", "D4.mp3",
+  "D3.mp3", "C3.mp3", "B2.mp3", "E3.mp3", "F3.mp3",
+  "G3.mp3", "A3.mp3", "B3.mp3", "F3.mp3", "E3.mp3"
   ].map(n => "sounds/" + n);
 
   sons.forEach(src => { const a = new Audio(); a.preload = "auto"; a.src = src; });

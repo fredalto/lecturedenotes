@@ -1,15 +1,15 @@
 const notesRepereEtConjointes = {
-  "C4": { nom: "Do", conjointes: ["B3", "D4"] },
-  "G4": { nom: "Sol", conjointes: ["F4", "A4"] },
-  "C3": { nom: "Do", conjointes: ["B2", "D3"] },
-  "F3": { nom: "Fa", conjointes: ["G3", "E3"] }
+  "F3": { nom: "Fa", conjointes: ["G3", "E3"] },
+  "C4": { nom: "Do", conjointes: ["D4", "B3"] },
+  "E2": { nom: "Mi", conjointes: ["F2", "D2"] },
+  "B2": { nom: "Si", conjointes: ["C3", "A2"] }
 };
-  
+
 const noteToNom = {
-  "C4": "Do", "B3": "Si", "D4": "Ré", 
-  "G4": "Sol", "F4": "Fa",  "A4": "La",
-  "C3": "Do", "B2": "Si", "D3": "Ré",
-  "F3": "Fa", "G3": "Sol", "E3": "Mi"
+  "F3": "Fa", "G3": "Sol", "E3": "Mi",
+  "C4": "Do", "D4": "Ré", "B3": "Si",
+  "E2": "Mi", "F2": "Fa", "D2": "Ré",
+  "B2": "Si", "C3": "Do", "A2": "La",
 };
 
 const reponses = ["Do", "Ré", "Mi", "Fa", "Sol", "La", "Si"];
@@ -67,7 +67,7 @@ function nextNote() {
 
   const note = quizNotes[current];
   correct = note.nom;
-  noteImg.src = "Images/ut3/" + note.img;
+  noteImg.src = "Images/fa/" + note.img;
   container.innerHTML = "";
   enableButtons();
   feedback.textContent = "";
@@ -225,7 +225,7 @@ function envoyerScore() {
   data.append("prof", prof);
   data.append("exercice", "Lecture de notes");
   data.append("type", "Clé");
-  data.append("niveau", "ut3_niveau2");
+  data.append("niveau", "fa_niveau2");
   data.append("score20", score20);
   data.append("scorePct", pourcentage);
 
@@ -265,23 +265,22 @@ function enableButtons() {
   }
 })();
 
+          
 // === Preload images & sounds ===
 (function preloadAssets() {
   // Images
   const images = [
-    "C4.png", "G4.png", "C3.png", "F3.png",
-    "B3.png", "F4.png", "D4.png", "A4.png",
-    "B2.png", "D3.png", "G3.png", "E3.png"
-  ].map(n => "Images/ut3/" + n);
+    "F3.png","G3.png","E3.png","C4.png","D4.png","B4.png",
+    "E2.png","F2.png","D2.png","B2.png","C3.png","A2.png"
+  ].map(n => "Images/fa/" + n);
 
   images.forEach(src => { const img = new Image(); img.src = src; });
 
   // Sons
   const sons = [
     "duck.mp3",
-    "C4.mp3", "G4.mp3", "C3.mp3", "F3.mp3",
-    "B3.mp3", "F4.mp3", "D4.mp3", "A4.mp3",
-    "B2.mp3", "D3.mp3", "G3.mp3", "E3.mp3"
+    "F3.mp3","G3.mp3","E3.mp3","C4.mp3","D4.mp3","B3.mp3",
+    "E2.mp3","F2.mp3","D2.mp3","B2.mp3","C3.mp3","A2.mp3"
   ].map(n => "sounds/" + n);
 
   sons.forEach(src => { const a = new Audio(); a.preload = "auto"; a.src = src; });

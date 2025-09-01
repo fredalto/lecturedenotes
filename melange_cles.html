@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mélange des clés — Entraînement</title>
+  <link rel="stylesheet" href="unified.css">
+</head>
+<body>
+
+  <h1>Mélange des clés — Entraînement (sans niveaux)</h1>
+
+  <div class="toolbar" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
+    <label><input type="checkbox" class="clef" value="sol" checked> Sol</label>
+    <label><input type="checkbox" class="clef" value="fa" checked> Fa</label>
+    <label><input type="checkbox" class="clef" value="ut3"> Ut3</label>
+    <label><input type="checkbox" class="clef" value="ut4"> Ut4</label>
+
+    <label>Questions :
+      <input id="nbQuestions" type="number" min="1" max="200" value="20" style="width:70px">
+    </label>
+
+    <button id="start-quiz" class="button">Démarrer</button>
+    <button id="reset-quiz" class="button" disabled>Réinitialiser</button>
+  </div>
+
+  <!-- HUD minimal -->
+  <div id="score-display">Score : 0 / 0</div>
+  <div id="progress-bar" style="height:10px; background:#4caf50; width:0%; transition:width .2s; margin:8px 0;"></div>
+
+  <!-- Zone quiz (mêmes ids que ta base pour les éléments clés) -->
+  <section id="quiz-section" style="display:none;">
+    <div id="note-zone" class="note" style="display:flex; flex-direction:column; align-items:center; gap:6px; margin:10px 0;">
+      <img id="note-image" src="" alt="note" style="max-height:200px;" />
+      <div id="feedback"></div>
+    </div>
+    <div id="game-container" class="game"></div>
+  </section>
+
+  <hr>
+
+  <!-- Envoi score optionnel -->
+  <div id="send-score" style="display:none;">
+    <h3>Envoyer mon score</h3>
+    <input id="prenom" placeholder="Prénom" />
+    <input id="nom" placeholder="Nom" />
+    <select id="prof">
+      <option value="">— Prof —</option>
+      <option>Prof 1</option>
+      <option>Prof 2</option>
+    </select>
+    <button class="button" onclick="envoyerScore()">Envoyer</button>
+    <p id="confirmation" style="margin-top:10px;font-weight:bold;"></p>
+    <p id="loading-message" style="display:none;color:blue;font-weight:bold;">⏳ Envoi en cours...</p>
+  </div>
+
+  <script src="melange_cles.js"></script>
+</body>
+</html>
+

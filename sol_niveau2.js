@@ -1,15 +1,14 @@
 const notesRepereEtConjointes = {
   "C4": { nom: "Do", conjointes: ["B3", "D4"] },
   "G4": { nom: "Sol", conjointes: ["F4", "A4"] },
-  "C3": { nom: "Do", conjointes: ["B2", "D3"] },
-  "F3": { nom: "Fa", conjointes: ["G3", "E3"] }
+  "C5": { nom: "Do", conjointes: ["B4", "D5"] },
+  "A5": { nom: "La", conjointes: ["G5", "B5"] }
 };
-  
+
 const noteToNom = {
-  "C4": "Do", "B3": "Si", "D4": "Ré", 
-  "G4": "Sol", "F4": "Fa",  "A4": "La",
-  "C3": "Do", "B2": "Si", "D3": "Ré",
-  "F3": "Fa", "G3": "Sol", "E3": "Mi"
+  "C4": "Do", "G4": "Sol", "C5": "Do", "A5": "La",
+  "B3": "Si", "D4": "Ré", "F4": "Fa", "A4": "La",
+  "B4": "Si", "D5": "Ré", "G5": "Sol", "B5": "Si",
 };
 
 const reponses = ["Do", "Ré", "Mi", "Fa", "Sol", "La", "Si"];
@@ -67,7 +66,7 @@ function nextNote() {
 
   const note = quizNotes[current];
   correct = note.nom;
-  noteImg.src = "Images/ut3/" + note.img;
+  noteImg.src = "Images/sol/" + note.img;
   container.innerHTML = "";
   enableButtons();
   feedback.textContent = "";
@@ -225,7 +224,7 @@ function envoyerScore() {
   data.append("prof", prof);
   data.append("exercice", "Lecture de notes");
   data.append("type", "Clé");
-  data.append("niveau", "ut3_niveau2");
+  data.append("niveau", "sol_niveau2");
   data.append("score20", score20);
   data.append("scorePct", pourcentage);
 
@@ -269,19 +268,17 @@ function enableButtons() {
 (function preloadAssets() {
   // Images
   const images = [
-    "C4.png", "G4.png", "C3.png", "F3.png",
-    "B3.png", "F4.png", "D4.png", "A4.png",
-    "B2.png", "D3.png", "G3.png", "E3.png"
-  ].map(n => "Images/ut3/" + n);
+    "C4.png","B3.png","D4.png","G4.png","F4.png","A4.png",
+    "C5.png","B4.png","D5.png","A5.png","G5.png","B5.png"
+  ].map(n => "Images/sol/" + n);
 
   images.forEach(src => { const img = new Image(); img.src = src; });
 
   // Sons
   const sons = [
     "duck.mp3",
-    "C4.mp3", "G4.mp3", "C3.mp3", "F3.mp3",
-    "B3.mp3", "F4.mp3", "D4.mp3", "A4.mp3",
-    "B2.mp3", "D3.mp3", "G3.mp3", "E3.mp3"
+    "C4.mp3","B3.mp3","D4.mp3","G4.mp3","F4.mp3","A4.mp3",
+    "C5.mp3","B4.mp3","D5.mp3","A5.mp3","G5.mp3","B5.mp3"
   ].map(n => "sounds/" + n);
 
   sons.forEach(src => { const a = new Audio(); a.preload = "auto"; a.src = src; });

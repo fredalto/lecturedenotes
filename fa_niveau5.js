@@ -1,20 +1,14 @@
-const notesRepereEtConjointes = {
-  "C4": { nom: "Do", conjointes: ["B3", "D4"] },
-  "G4": { nom: "Sol", conjointes: ["F4", "A4"] },
-  "C3": { nom: "Do", conjointes: ["B2", "D3"] },
-  "F3": { nom: "Fa", conjointes: ["G3", "E3"] }
-};
-  
+
+
 const noteToNom = {
-  "C4": "Do", "B3": "Si", "D4": "Ré", 
-  "G4": "Sol", "F4": "Fa",  "A4": "La",
-  "C3": "Do", "B2": "Si", "D3": "Ré",
-  "F3": "Fa", "G3": "Sol", "E3": "Mi"
+"C2": "Do", "D2": "Ré", "E2": "Mi", "F2": "Fa", "G2": "Sol", "A2": "La", "B2": "Si",
+"C3": "Do", "D3": "Ré", "E3": "Mi", "F3": "Fa", "G3": "Sol", "A3": "La", "B3": "Si",
+"C4": "Do", "D4": "Ré", "E4": "Mi"
 };
 
 const reponses = ["Do", "Ré", "Mi", "Fa", "Sol", "La", "Si"];
 
-let score = 0, total = 10, current = 0, quizNotes = [], correct = "", scoreEnvoye = false;
+let score = 0, total = 20, current = 0, quizNotes = [], correct = "", scoreEnvoye = false;
 
 
 const startBtn = document.getElementById("start-quiz");
@@ -39,25 +33,68 @@ startBtn.onclick = () => {
 };
 
 function generateSequence() {
-  const repereKeys = Object.keys(notesRepereEtConjointes);
-  const result = [];
-  let prevRepere = null; 
-  for (let i = 0; i < total; i++) {
-    if (i % 2 === 0) {
-const candidats = prevRepere
-        ? repereKeys.filter(r => r !== prevRepere)
-        : repereKeys.slice(); 
-      const r = candidats[Math.floor(Math.random() * candidats.length)];
-      result.push({ code: r, nom: noteToNom[r], img: r + ".png", repere: r });
-      prevRepere = r; 
-    } else {
-      const conj = notesRepereEtConjointes[prevRepere].conjointes;
-      const c = conj[Math.floor(Math.random() * conj.length)];
-      result.push({ code: c, nom: noteToNom[c], img: c + ".png", repere: prevRepere });
+  const toutesLesNotes = [
+"C2", "D2", "E2", "F2", "G2", "A2", "B2",
+"C3", "D3", "E3", "F3", "G3", "A3", "B3",
+"C4", "D4", "E4"
+  ];
+
+  const repereObligatoires = ["F3", "C4", "E2", "B2"];
+  const notesUtilisees = {};
+  const sequence = [];
+
+  // D'abord on tire 16 notes aléatoires (hors repères)
+  const autresNotes = toutesLesNotes.filter(n => !repereObligatoires.includes(n));
+  while (sequence.length < 16) {
+    const dernierCode = sequence[sequence.length - 1]?.code;
+
+    const candidates = autresNotes.filter(n => {
+      return (notesUtilisees[n] || 0) < 2 && n !== dernierCode;
+    });
+
+    if (candidates.length === 0) break;
+
+    const note = candidates[Math.floor(Math.random() * candidates.length)];
+    sequence.push({
+      code: note,
+      nom: noteToNom[note],
+      img: note + ".png"
+    });
+    notesUtilisees[note] = (notesUtilisees[note] || 0) + 1;
+  }
+
+  // On ajoute les 4 repères (une fois chacun)
+  repereObligatoires.forEach(code => {
+    sequence.push({
+      code,
+      nom: noteToNom[code],
+      img: code + ".png"
+    });
+  });
+
+  // Mélanger le tout
+  for (let i = sequence.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [sequence[i], sequence[j]] = [sequence[j], sequence[i]];
+  }
+
+  // Éviter deux notes identiques consécutives
+  for (let i = 1; i < sequence.length; i++) {
+    if (sequence[i].code === sequence[i - 1].code) {
+      // Chercher une position non consécutive pour swap
+      for (let j = i + 1; j < sequence.length; j++) {
+        if (sequence[j].code !== sequence[i - 1].code) {
+          [sequence[i], sequence[j]] = [sequence[j], sequence[i]];
+          break;
+        }
+      }
     }
   }
-  return result;
+
+  return sequence;
 }
+
+
 
 function nextNote() {
   if (current >= total) {
@@ -67,7 +104,7 @@ function nextNote() {
 
   const note = quizNotes[current];
   correct = note.nom;
-  noteImg.src = "Images/ut3/" + note.img;
+  noteImg.src = "Images/fa/" + note.img;
   container.innerHTML = "";
   enableButtons();
   feedback.textContent = "";
@@ -153,16 +190,26 @@ function finishQuiz() {
   scoreDisplay.classList.remove("hidden");
   const pct = Math.round((score / total) * 100);
   const btnN1 = document.getElementById("niveau-1");
+  const btnN3 = document.getElementById("niveau-suivant");
+
+ // -- Visibilité du bouton "Niveau 4" : visible seulement si pct < 25 %
 if (btnN1) {
-  btnN1.classList.add("hidden");       // reset à chaque fin de quiz
-  if (pct < 25) btnN1.classList.remove("hidden");
+  btnN1.classList.add("hidden"); // Réinitialise
+  if (pct < 25) {
+    btnN1.textContent = "Niveau 4";
+    btnN1.classList.remove("hidden");
+  }
 }
-  // -- Visibilité du bouton "Niveau 3" : visible seulement si pct ≥ 75 %
-const btnN3 = document.getElementById("niveau-suivant");
+
+  // -- Visibilité du bouton "Défis" : visible seulement si pct ≥ 75 %
 if (btnN3) {
-  btnN3.classList.add("hidden");        // on repart caché à chaque fin de quiz
-  if (pct >= 75) btnN3.classList.remove("hidden");
+  btnN3.classList.add("hidden");
+  if (pct >= 75) {
+    btnN3.textContent = "Défis";
+    btnN3.classList.remove("hidden");
+  }
 }
+
 
   scoreDisplay.innerHTML = `
     <div style="font-size: 48px; font-weight: bold; margin-bottom: 10px;">
@@ -174,16 +221,31 @@ if (btnN3) {
   `;
 
   // 4) Message final
-  finalMessage.innerHTML = pct >= 75
-    ? `<div style="color: green; font-size: 20px; margin-bottom: 10px;">
-        🎉 Félicitations ! Tu maîtrises les notes comme un chef d’orchestre ! 🥳
-      </div>
-      <div style="font-size: 18px; color: #333; margin-bottom: 20px;">
-        🚀 Tu es prêt·e à passer au niveau suivant !
-      </div>`
-    : `<div style="font-size: 18px; color: #333; margin-bottom: 20px;">
-        🔁 Recommence le niveau pour renforcer ta rapidité et ta précision !
-      </div>`;
+if (pct >= 75) {
+  finalMessage.innerHTML = `
+    <div style="color: green; font-size: 20px; margin-bottom: 10px;">
+      🎉 Fantastique ! Tes yeux de lynx ont dompté la clé de sol ! 😎
+    </div>
+    <div style="font-size: 18px; color: #333; margin-bottom: 20px;">
+      🚀 Tu es prêt·e à relever les défis ultimes !
+    </div>`;
+} else if (pct < 25) {
+  finalMessage.innerHTML = `
+    <div style="color: #f44336; font-size: 20px; margin-bottom: 10px;">
+      🧱 Ce n’est pas grave ! Reprends les bases au niveau 4 pour mieux réussir. 💪
+    </div>`;
+} else if (pct < 50) {
+  finalMessage.innerHTML = `
+    <div style="font-size: 18px; color: #555; margin-bottom: 20px;">
+      🌱 Tu progresses ! Recommence en prenant ton temps, tu vas y arriver. 🙂
+    </div>`;
+} else {
+  finalMessage.innerHTML = `
+    <div style="font-size: 18px; color: #333; margin-bottom: 20px;">
+      💡 Pas mal ! Mais tu peux viser plus haut.
+    </div>`;
+}
+
 
   // 5) Afficher les boutons de fin et l’envoi du score
   endButtons.classList.remove("hidden");
@@ -204,7 +266,7 @@ function envoyerScore() {
   const prenom = document.getElementById("prenom").value.trim();
   const nom = document.getElementById("nom").value.trim();
   const prof = document.getElementById("prof").value.trim();
-  const score20 = score * 2;
+  const score20 = score ;
   const pourcentage = Math.round((score / total) * 100);
   const confirmation = document.getElementById("confirmation");
   const bouton = document.querySelector("#send-score button");
@@ -225,7 +287,7 @@ function envoyerScore() {
   data.append("prof", prof);
   data.append("exercice", "Lecture de notes");
   data.append("type", "Clé");
-  data.append("niveau", "ut3_niveau2");
+  data.append("niveau", "fa_niveau5");
   data.append("score20", score20);
   data.append("scorePct", pourcentage);
 
@@ -269,19 +331,21 @@ function enableButtons() {
 (function preloadAssets() {
   // Images
   const images = [
-    "C4.png", "G4.png", "C3.png", "F3.png",
-    "B3.png", "F4.png", "D4.png", "A4.png",
-    "B2.png", "D3.png", "G3.png", "E3.png"
-  ].map(n => "Images/ut3/" + n);
+"C2.png", "D2.png", "E2.png", "F2.png", "G2.png", "A2.png", "B2.png",
+"C3.png", "D3.png", "E3.png", "F3.png", "G3.png", "A3.png", "B3.png",
+"C4.png", "D4.png", "E4.png"
+  ].map(n => "Images/fa/" + n);
+
+
 
   images.forEach(src => { const img = new Image(); img.src = src; });
 
   // Sons
   const sons = [
     "duck.mp3",
-    "C4.mp3", "G4.mp3", "C3.mp3", "F3.mp3",
-    "B3.mp3", "F4.mp3", "D4.mp3", "A4.mp3",
-    "B2.mp3", "D3.mp3", "G3.mp3", "E3.mp3"
+"C2.mp3", "D2.mp3", "E2.mp3", "F2.mp3", "G2.mp3", "A2.mp3", "B2.mp3",
+"C3.mp3", "D3.mp3", "E3.mp3", "F3.mp3", "G3.mp3", "A3.mp3", "B3.mp3",
+"C4.mp3", "D4.mp3", "E4.mp3"
   ].map(n => "sounds/" + n);
 
   sons.forEach(src => { const a = new Audio(); a.preload = "auto"; a.src = src; });

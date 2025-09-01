@@ -1,0 +1,154 @@
+body {
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      text-align: center;
+      padding: 20px 10px;
+      background-color: #f2f4f8;
+      color: #333;
+    }
+    .hidden {
+      display: none !important;
+    }
+    .fade {
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .fade.show {
+      opacity: 1;
+    }
+    button {
+      padding: 12px 28px;
+      margin: 6px;
+      font-size: 18px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .selected {
+      background-color: #2196F3 !important;
+    }
+    .section {
+      margin-top: 20px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 16px;
+    }
+    .mode-buttons {
+      margin-bottom: 10px;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 14px;
+    }
+    .mode-buttons p {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+    .mode-buttons button.selected {
+      background-color: #1565c0;
+    }
+    .step-container {
+      margin-top: 12px;
+    }
+    .niveau-card, .defi-card {
+      border: 2px solid #4CAF50;
+      border-radius: 10px;
+      padding: 12px;
+      margin: 8px auto;
+      max-width: 400px;
+      background-color: #e8f5e9;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .niveau-card:hover, .defi-card:hover {
+      transform: scale(1.02);
+    }
+    .niveau-card.selected, .defi-card.selected {
+      border-color: #f44336;
+      background-color: #ffebee;
+    }
+    #go-button, #go-button-melange, #go-button-defi {
+      margin-top: 16px;
+      background-color: #f44336;
+      font-size: 20px;
+      padding: 10px 26px;
+      border-radius: 8px;
+    }
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 12px;
+      color: #1565c0;
+    }
+    h1::before {
+      content: "🎵 ";
+    }
+    h2, h3, h4 {
+      color: #2c3e50;
+      margin: 10px 0 6px;
+    }
+    
+    .red-button { background-color: #f44336; }
+
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  font-size: 20px;
+  text-decoration: none;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.15);
+}
+.home-btn:hover { box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+.home-btn:focus { outline: 2px solid #1565c0; outline-offset: 2px; }
+
+.section-topbar {
+  display: flex;
+  justify-content: flex-start; /* lien à gauche */
+  margin-bottom: 6px;
+}
+
+.home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  font-size: 14px;
+  text-decoration: none;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.15);
+}
+
+.home-link:hover { box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+.home-link:focus { outline: 2px solid #1565c0; outline-offset: 2px; }
+
+.hud-row{display:flex;align-items:center;gap:10px}
+.time-xxl{font-size:24px;font-weight:800;min-width:76px;text-align:right}
+.timebar{flex:1;height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden}
+.timebar > span{display:block;height:100%;width:0%;background:#10b981;transition:width .2s linear, background-color .2s}
+.timebar > span.warn{background:#f59e0b}
+.timebar > span.danger{background:#ef4444}
+.lives-hearts{font-size:22px;min-width:92px;text-align:left;line-height:1}
+.lives-hearts.pop{animation:pop .35s ease}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+
+#level-steps .step{display:inline-block;width:10px;height:10px;border-radius:50%;background:#d1d5db;margin:0 2px;vertical-align:middle}
+#level-steps .step.filled{background:#4CAF50}
+#level-steps .step.current{background:#4CAF50;transform:scale(1.22)}
+

@@ -1,11 +1,11 @@
 const notes = [
-  { nom: "Do", image: "Images/ut3/C4.png" },
-  { nom: "Sol", image: "Images/ut3/G4.png" },
-  { nom: "Do", image: "Images/ut3/C3.png" },
-  { nom: "Fa", image: "Images/ut3/F3.png" }
+  { nom: "Sol", image: "Images/sol/G4.png" },
+  { nom: "Do", image: "Images/sol/C4.png" },
+  { nom: "Do", image: "Images/sol/C5.png" },
+  { nom: "La", image: "Images/sol/A5.png" }
 ];
 
-const labels = ["Do", "Fa", "Sol"];
+const labels = ["Do", "Sol", "La"];
 let score = 0;
 let totalQuestions = 10;
 let currentQuestion = 0;
@@ -184,7 +184,7 @@ function showFinalScore() {
     goldButton.textContent = "Niveau 2";
     goldButton.className = "button gold-button";
     goldButton.onclick = () => {
-      window.location.href = "ut3_niveau2.html";
+      window.location.href = "sol_niveau2.html";
     };
     endButtons.insertBefore(goldButton, endButtons.firstChild);
   }
@@ -222,7 +222,7 @@ function envoyerScore() {
   data.append("prof", prof);
   data.append("exercice", "Lecture de notes");
   data.append("type", "Clé");
-  data.append("niveau", "ut3_niveau1");
+  data.append("niveau", "sol_niveau1");
   data.append("score20", score20);
   data.append("scorePct", pourcentage);
 

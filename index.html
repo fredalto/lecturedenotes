@@ -1,32 +1,296 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apprentissage de la lecture de notes</title>
-    <link rel="stylesheet" href="styles.css">
-<style>
-.green-button {
-    background-color: green;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 5px;
-    text-decoration: none;
-    display: inline-block;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lecture de Notes</title>
+  <link rel="stylesheet" href="unified.css">
 </head>
 <body>
-    <h1>Choisissez une clé</h1>
-    <div class="key-options">
-        <button class="green-button" onclick="window.location.href='sol.html'">Clé de Sol</button>
-        <button class="green-button" onclick="window.location.href='fa.html'">Clé de Fa</button>
-        <button class="green-button" onclick="window.location.href='ut3.html'">Clé d'Ut3</button>
-        <button class="green-button" onclick="window.location.href='ut4.html'">Clé d'Ut4</button>
+  <h1>Lecture de Notes Express</h1>
+
+  <div class="section">
+    <!-- MODE DE JEU -->
+    <div class="mode-buttons">
+      <p>Choisissez un mode de jeu pour travailler la lecture de notes :</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:680px;margin:0 auto;">
+        <button id="btn-cle" style="width:100%" onclick="choisirMode(this, 'cle')">Clé</button>
+        <button id="btn-melange" style="width:100%" onclick="choisirMode(this, 'melange')">Mélange</button>
+        <button id="btn-defi" style="width:100%" onclick="choisirMode(this, 'defi')">Défi</button>
+      </div>
     </div>
+
+    <!-- SECTION CLÉS -->
+    <div id="etape-cle" class="step-container fade hidden">
+      <h3>Choisissez une clé</h3>
+      <div id="cle-buttons"
+           style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:520px;margin:0 auto;">
+        <button style="width:100%;" onclick="setCle(this, 'sol')">Sol</button>
+        <button style="width:100%;" onclick="setCle(this, 'fa')">Fa</button>
+        <button style="width:100%;" onclick="setCle(this, 'ut3')">Ut3</button>
+        <button style="width:100%;" onclick="setCle(this, 'ut4')">Ut4</button>
+      </div>
+    </div>
+
+    <!-- SECTION NIVEAUX -->
+    <div id="etape-niveau" class="step-container fade hidden">
+      <h3>Niveau de l'exercice</h3>
+      <div id="niveaux"
+           style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;grid-auto-rows:1fr;align-items:stretch;">
+
+        <div class="niveau-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
+             onclick="selectNiveau(1)">
+          <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 1</strong>
+          <span>Les notes repères</span>
+        </div>
+
+        <div class="niveau-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
+             onclick="selectNiveau(2)">
+          <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 2</strong>
+          <span>Les notes repères et leurs notes conjointes</span>
+        </div>
+
+        <div class="niveau-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
+             onclick="selectNiveau(3)">
+          <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 3</strong>
+          <span>Les notes repères et leurs tierces</span>
+        </div>
+
+        <div class="niveau-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
+             onclick="selectNiveau(4)">
+          <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 4</strong>
+          <span>Les notes repères + conjointes + tierces</span>
+        </div>
+
+        <div class="niveau-card"
+             style="margin:0;line-height:1.35;grid-column:1 / -1;justify-self:center;width:min(100%,420px);
+                    will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
+             onclick="selectNiveau(5)">
+          <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 5</strong>
+          <span>Toutes les notes</span>
+        </div>
+      </div>
+
+      <button id="go-button" class="hidden" onclick="lancerExercice('cle')">On y va 🚀</button>
+    </div>
+
+    <!-- SECTION MÉLANGE -->
+    <div id="etape-melange" class="step-container fade hidden">
+      <h3>Choisissez au moins deux clés</h3>
+      <p>Vous pouvez combiner Sol, Fa, Ut3 et Ut4 pour un entraînement varié !</p>
+      <div id="melange-cles"
+           style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:520px;margin:0 auto;">
+        <button style="width:100%;" onclick="toggleMelangeCle(this, 'sol')">Sol</button>
+        <button style="width:100%;" onclick="toggleMelangeCle(this, 'fa')">Fa</button>
+        <button style="width:100%;" onclick="toggleMelangeCle(this, 'ut3')">Ut3</button>
+        <button style="width:100%;" onclick="toggleMelangeCle(this, 'ut4')">Ut4</button>
+      </div>
+      <button id="go-button-melange" class="hidden" onclick="lancerMelange()">On y va 🚀</button>
+    </div>
+
+    <!-- SECTION DÉFIS -->
+    <div id="etape-defi" class="step-container fade hidden">
+      <h3>Relève ton défi !</h3>
+
+      <div id="defi-cles"
+           style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;grid-auto-rows:1fr;align-items:stretch;">
+
+        <div class="defi-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
+             onclick="selectDefi(this, 'sol')">
+          <strong style="display:block;text-align:center;margin-bottom:6px;">Défi Sol</strong>
+          <span>Deviens le roi de la clé de Sol !</span>
+        </div>
+
+        <div class="defi-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
+             onclick="selectDefi(this, 'fa')">
+          <strong style="display:block;text-align:center;margin-bottom:6px;">Défi Fa</strong>
+          <span>Maîtrise les notes graves comme un·e pro !</span>
+        </div>
+
+        <div class="defi-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
+             onclick="selectDefi(this, 'ut3')">
+          <strong style="display:block;text-align:center;margin-bottom:6px;">Défi Ut3</strong>
+          <span>Prouve que tu domines l’alto !</span>
+        </div>
+
+        <div class="defi-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
+             onclick="selectDefi(this, 'ut4')">
+          <strong style="display:block;text-align:center;margin-bottom:6px;">Défi Ut4</strong>
+          <span>Pour les fans de la clé de ténor !</span>
+        </div>
+
+        <div class="defi-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
+             onclick="selectDefi(this, 'solfa')">
+          <strong style="display:block;text-align:center;margin-bottom:6px;">Défi Sol + Fa</strong>
+          <span>Lecture bimanuelle activée !</span>
+        </div>
+
+        <!-- DÉFI ULTIME DORÉ -->
+        <div id="defi-ultime" class="defi-card"
+             style="margin:0;line-height:1.35;display:flex;flex-direction:column;justify-content:center;
+                    background-color:gold;color:black;font-weight:bold;
+                    will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
+             onclick="selectDefi(this, 'ultime')">
+          <strong style="display:block;text-align:center;margin-bottom:6px;">Défi Ultime</strong>
+          <span>Le dieu de la lecture de notes, c’est toi ?</span>
+        </div>
+      </div>
+
+      <button id="go-button-defi" class="hidden" onclick="lancerDefiChoisi()">On y va 🚀</button>
+    </div>
+  </div>
+
+  <script>
+    let cleChoisie = '';
+    let niveauChoisi = 0;
+    let melangeCles = [];
+    let defiChoisi = '';
+
+    function showFadeSection(id) {
+      const el = document.getElementById(id);
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('show'), 10);
+    }
+
+    function hideAllFadeSections() {
+      document.querySelectorAll('.fade').forEach(el => {
+        el.classList.remove('show');
+        setTimeout(() => el.classList.add('hidden'), 300);
+      });
+    }
+
+    function choisirMode(button, mode) {
+      document.querySelectorAll('.mode-buttons button').forEach(btn => btn.classList.remove('selected'));
+      button.classList.add('selected');
+      hideAllFadeSections();
+      if (mode === 'cle') {
+        setTimeout(() => showFadeSection('etape-cle'), 300);
+      } else if (mode === 'melange') {
+        setTimeout(() => showFadeSection('etape-melange'), 300);
+      } else if (mode === 'defi') {
+        setTimeout(() => showFadeSection('etape-defi'), 300);
+      }
+    }
+
+    function setCle(button, cle) {
+      document.querySelectorAll('#cle-buttons button').forEach(btn => btn.classList.remove('selected'));
+      button.classList.add('selected');
+      cleChoisie = cle;
+      hideAllFadeSections();
+      setTimeout(() => showFadeSection('etape-cle'), 300);
+      setTimeout(() => showFadeSection('etape-niveau'), 600);
+    }
+
+    function selectNiveau(n) {
+      document.querySelectorAll('.niveau-card').forEach(card => card.classList.remove('selected'));
+      document.querySelectorAll('.niveau-card')[n - 1].classList.add('selected');
+      niveauChoisi = n;
+      document.getElementById('go-button').classList.remove('hidden');
+    }
+
+    // Défis
+    function selectDefi(el, cle) {
+      document.querySelectorAll('.defi-card').forEach(c => {
+        c.classList.remove('selected');
+        if (c.id === 'defi-ultime') {
+          c.style.backgroundColor = 'gold';
+          c.style.color = 'black';
+          c.style.fontWeight = 'bold';
+        }
+      });
+      el.classList.add('selected');
+      defiChoisi = cle;
+      if (el.id === 'defi-ultime') {
+        el.style.backgroundColor = 'gold';
+        el.style.color = 'black';
+        el.style.fontWeight = 'bold';
+      }
+      document.getElementById('go-button-defi').classList.remove('hidden');
+    }
+
+    function lancerDefiChoisi() {
+      const url = `defi_${defiChoisi}.html`;
+      window.location.href = url;
+      const cheminJS = `defi_${defiChoisi}.js`;
+      const script = document.createElement('script');
+      script.src = cheminJS;
+      script.onload = () => { console.log(`Script ${cheminJS} chargé.`); };
+      script.onerror = () => { alert("Erreur de chargement du fichier : " + cheminJS); };
+      document.body.appendChild(script);
+      alert(`Défi sélectionné : ${defiChoisi}`);
+    }
+
+    function toggleMelangeCle(button, cle) {
+      button.classList.toggle('selected');
+      if (melangeCles.includes(cle)) {
+        melangeCles = melangeCles.filter(c => c !== cle);
+      } else {
+        melangeCles.push(cle);
+      }
+      document.getElementById('go-button-melange').classList.toggle('hidden', melangeCles.length < 2);
+    }
+
+    function lancerExercice(type) {
+      const url = `${cleChoisie}_niveau${niveauChoisi}.html`;
+      window.location.href = url;
+      const cheminJS = `${cleChoisie}_niveau${niveauChoisi}.js`;
+      const script = document.createElement('script');
+      script.src = cheminJS;
+      script.onload = () => { console.log(`Script ${cheminJS} chargé.`); };
+      script.onerror = () => { alert("Erreur de chargement du fichier : " + cheminJS); };
+      document.body.appendChild(script);
+      alert(`Lancement d'un exercice (${type}) : clé ${cleChoisie}, niveau ${niveauChoisi}`);
+    }
+
+    // Effets hover / clic / cascade
+    function addCardHoverEffects(container) {
+      const cards = container.querySelectorAll('.niveau-card, .defi-card');
+      cards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+          card.style.transform = 'translateY(-2px)';
+          card.style.boxShadow = '0 8px 18px rgba(0,0,0,.12)';
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'translateY(0)';
+          card.style.boxShadow = '';
+        });
+        card.addEventListener('mousedown', () => { card.style.transform = 'translateY(0)'; });
+        card.addEventListener('mouseup', () => { card.style.transform = 'translateY(-2px)'; });
+        card.setAttribute('tabindex', '0');
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { card.click(); e.preventDefault(); }
+        });
+      });
+    }
+
+    function cascadeIn(container) {
+      const cards = container.querySelectorAll('.niveau-card, .defi-card');
+      cards.forEach((card, i) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(6px)';
+        card.style.transition = 'opacity .22s ease, transform .22s ease';
+        setTimeout(() => {
+          card.style.opacity = '1';
+          card.style.transform = '';
+        }, 60 + i * 40);
+      });
+    }
+
+    const _showFadeSection = showFadeSection;
+    showFadeSection = function(id){
+      _showFadeSection(id);
+      const el = document.getElementById(id);
+      setTimeout(() => {
+        addCardHoverEffects(el);
+        cascadeIn(el);
+      }, 20);
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const initialSections = document.querySelectorAll('.step-container:not(.hidden)');
+      initialSections.forEach(sec => { addCardHoverEffects(sec); cascadeIn(sec); });
+    });
+  </script>
 </body>
 </html>
+

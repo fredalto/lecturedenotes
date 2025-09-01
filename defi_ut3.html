@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lecture de Notes Ut3 Niveau1</title>
+  <title>Défi Sol</title>
   <link rel="stylesheet" href="unified.css">
   <style>
     .note img { max-width: 100px; height: auto; margin: 10px; }
@@ -13,54 +13,59 @@
     #feedback.incorrect { color: red; }
     #progress-container { width: 100%; background-color: #ddd; border-radius: 10px; margin-top: 20px; height: 20px; }
     #progress-bar { height: 100%; width: 0%; background-color: #4CAF50; border-radius: 10px; transition: width 0.4s ease-in-out; }
-    #score-display { font-size: 28px; font-weight: bold; margin-top: 20px; }
-    .gold-button {
-      background: linear-gradient(to bottom right, #FFD700, #FFA500);
-      color: black;
-      font-weight: bold;
-      border: 2px solid #DAA520;
-      box-shadow: 0 0 10px gold;
-      margin-bottom: 10px;
-    }
+    #score-display { font-size: 20px; font-weight: 600; margin-top: 12px; }
+    .repere { outline: 4px solid #e22; outline-offset: 2px; border-radius: 8px; }
   </style>
 </head>
 <body>
   <h1>Lecture de Notes Express</h1>
 
   <div class="section">
-  <div class="section-topbar">
-  <a class="home-link" href="index.html" aria-label="Revenir à l'accueil">🏠 Accueil</a>
-</div>
+    <div class="section-topbar">
+      <a class="home-link" href="index.html" aria-label="Revenir à l'accueil">🏠 Accueil</a>
+    </div>
 
-    <h2 style="color: red;">Niveau 1 - Clé d'Ut3</h2>
+    <h2 style="color: red;">Défi ut3 — progression N1 → N5</h2>
 
+    <!-- Intro repères (mêmes visuels que tes niveaux) -->
     <div id="note-reference">
       <h2>Voici les quatre notes repères :</h2>
       <div class="note"><img alt="Do4" src="Images/ut3/C4.png"/><p>Do</p></div>
       <div class="note"><img alt="Sol4" src="Images/ut3/G4.png"/><p>Sol</p></div>
       <div class="note"><img alt="Do3" src="Images/ut3/C3.png"/><p>Do</p></div>
       <div class="note"><img alt="Fa3" src="Images/ut3/F3.png"/><p>Fa</p></div>
-      <button class="button" id="start-quiz">Commencer le Quiz</button>
+      <button class="button" id="start-quiz">Commencer le Défi</button>
       <p style="margin-top: 10px; font-size: 14px; color: #555;">
-  💡 Astuce : Vous pouvez aussi répondre avec le clavier !<br>
-  <small>C = Do, F = Fa, G = Sol</small>
-</p>
+        💡 Astuce : clavier = C D E F G A B (Do Ré Mi Fa Sol La Si)
+      </p>
     </div>
 
+    <!-- Zone de jeu (IDs identiques à tes niveaux) -->
     <div id="quiz-section" style="display: none;">
-      <div id="note-display"><img alt="Note" id="note-image" src=""/></div>
+      <!-- HUD compact : titre + stepper + chrono + barre + coeurs -->
+<div id="hud2" style="margin:8px 0">
+  <div id="level-title" style="font-weight:700; font-size:18px;"></div>
+  <div id="level-steps" aria-hidden="true" style="margin:2px 0 8px;"></div>
+
+  <div class="hud-row">
+    <div id="time-xxl" class="time-xxl">01:00</div>
+    <div id="timebar" class="timebar"><span id="timebar-fill"></span></div>
+    <div id="lives-hearts" class="lives-hearts" aria-label="vies">❤️❤️❤️</div>
+  </div>
+</div>
+<div id="note-display"><img alt="Note" id="note-image" src=""/></div>
       <div id="game-container"></div>
       <div id="feedback"></div>
       <div id="progress-container"><div id="progress-bar"></div></div>
       <div id="score-display"></div>
     </div>
 
+    <!-- Fin -->
     <div id="end-buttons" style="display: none;">
-      <button class="button" onclick="window.location.reload();">Recommencer le niveau</button>
       <button class="button" onclick="window.location.href='index.html';">Revenir à l'accueil</button>
     </div>
 
-    <!-- Formulaire d'envoi -->
+    <!-- Envoi score (même mécanique que tes niveaux) -->
     <div id="send-score" style="display: none; margin-top: 30px;">
       <h3>Envoyer mon score au professeur</h3>
       <input type="text" id="prenom" placeholder="Prénom" required style="margin: 5px;" />
@@ -73,7 +78,6 @@
         <option value="Chloé">Chloé</option>
         <option value="Frédéric">Frédéric</option>
         <option value="Sandrine">Sandrine</option>
-        <option value="Thomas">Thomas</option>
       </select>
       <br>
       <button class="button" onclick="envoyerScore()">Envoyer</button>
@@ -82,10 +86,9 @@
     </div>
   </div>
 
-  <!-- Iframe invisible pour envoyer les données -->
   <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
-  <script src="ut3_niveau1.js"></script>
+  <script src="defi_ut3.js"></script>
 </body>
 </html>
 

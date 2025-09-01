@@ -1,17 +1,17 @@
 const notesRepereEtConjointes = {
-  "C4": { nom: "Do", conjointes: ["B3", "D4"] },
-  "G4": { nom: "Sol", conjointes: ["F4", "A4"] },
-  "C3": { nom: "Do", conjointes: ["B2", "D3"] },
-  "F3": { nom: "Fa", conjointes: ["G3", "E3"] }
-};
-  
-const noteToNom = {
-  "C4": "Do", "B3": "Si", "D4": "Ré", 
-  "G4": "Sol", "F4": "Fa",  "A4": "La",
-  "C3": "Do", "B2": "Si", "D3": "Ré",
-  "F3": "Fa", "G3": "Sol", "E3": "Mi"
+  "C4": { nom: "Do", conjointes: ["E4", "A3"] },
+  "G4": { nom: "Sol", conjointes: ["B4", "E4"] },
+  "C3": { nom: "Do", conjointes: ["A2", "E3"] },
+  "F3": { nom: "Fa", conjointes: ["A3", "D3"] }
 };
 
+const noteToNom = {
+  "C4": "Do", "E4": "Mi", "A3": "La",
+  "G4": "Sol", "B4": "Si","E4": "Mi",
+  "C3": "Do", "A2": "La", "E3": "Mi",
+  "F3": "Fa", "A3": "La", "D3": "Ré"
+};
+  
 const reponses = ["Do", "Ré", "Mi", "Fa", "Sol", "La", "Si"];
 
 let score = 0, total = 10, current = 0, quizNotes = [], correct = "", scoreEnvoye = false;
@@ -157,7 +157,7 @@ if (btnN1) {
   btnN1.classList.add("hidden");       // reset à chaque fin de quiz
   if (pct < 25) btnN1.classList.remove("hidden");
 }
-  // -- Visibilité du bouton "Niveau 3" : visible seulement si pct ≥ 75 %
+  // -- Visibilité du bouton "Niveau 4" : visible seulement si pct ≥ 75 %
 const btnN3 = document.getElementById("niveau-suivant");
 if (btnN3) {
   btnN3.classList.add("hidden");        // on repart caché à chaque fin de quiz
@@ -225,7 +225,7 @@ function envoyerScore() {
   data.append("prof", prof);
   data.append("exercice", "Lecture de notes");
   data.append("type", "Clé");
-  data.append("niveau", "ut3_niveau2");
+  data.append("niveau", "ut3_niveau3");
   data.append("score20", score20);
   data.append("scorePct", pourcentage);
 
@@ -269,21 +269,23 @@ function enableButtons() {
 (function preloadAssets() {
   // Images
   const images = [
-    "C4.png", "G4.png", "C3.png", "F3.png",
-    "B3.png", "F4.png", "D4.png", "A4.png",
-    "B2.png", "D3.png", "G3.png", "E3.png"
+  "C4.png" , "E4.png" , "A3.png",
+  "G4.png" , "B4.png" , "E4.png",
+  "C3.png" , "A2.png" , "E3.png",
+  "F3.png" , "A3.png" , "D3.png"
   ].map(n => "Images/ut3/" + n);
-
+  
   images.forEach(src => { const img = new Image(); img.src = src; });
 
   // Sons
   const sons = [
     "duck.mp3",
-    "C4.mp3", "G4.mp3", "C3.mp3", "F3.mp3",
-    "B3.mp3", "F4.mp3", "D4.mp3", "A4.mp3",
-    "B2.mp3", "D3.mp3", "G3.mp3", "E3.mp3"
+  "C4.mp3" , "E4.mp3" , "A3.mp3",
+  "G4.mp3" , "B4.mp3" , "E4.mp3",
+  "C3.mp3" , "A2.mp3" , "E3.mp3",
+  "F3.mp3" , "A3.mp3" , "D3.mp3"
   ].map(n => "sounds/" + n);
-
+  
   sons.forEach(src => { const a = new Audio(); a.preload = "auto"; a.src = src; });
 })();
 
