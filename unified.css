@@ -152,26 +152,53 @@ body {
 #level-steps .step.filled{background:#4CAF50}
 #level-steps .step.current{background:#4CAF50;transform:scale(1.22)}
 
-/* --- Corrections mobile --- */
+#cle-buttons,
+#melange-cles,
+#defi-cles,
+#niveaux {
+  display: grid;
+}
+
+/* --- Fix mobile layout: <= 600px --- */
 @media (max-width: 600px) {
-  /* Harmonise la carte "Niveau 5" avec les autres */
+  /* 1) Boutons CLÉ / MÉLANGE : 2 colonnes confortables */
+  #cle-buttons,
+  #melange-cles {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    max-width: 420px !important;
+  }
+
+  /* 2) Cartes DÉFI : une seule colonne fluide */
+  #defi-cles {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* 3) Boutons : taille lisible et largeur pleine */
+  #cle-buttons button,
+  #melange-cles button,
+  .mode-buttons button {
+    font-size: 16px;      /* évite le zoom iOS */
+    padding: 12px 16px;
+    width: 100% !important;
+  }
+
+  /* 4) "Niveau 5" : supprime les overrides inline qui provoquent le débord */
   #niveaux .niveau-card:last-child {
     grid-column: auto !important;
     justify-self: stretch !important;
     width: 100% !important;
   }
 
-  /* Un peu plus de confort en grille sur petits écrans */
-  #cle-buttons,
-  #melange-cles {
-    grid-template-columns: repeat(2, 1fr) !important; /* au lieu de 4 colonnes serrées */
-    max-width: 420px !important;
-  }
-
-  /* Cartes plus régulières et faciles à toucher */
-  #niveaux .niveau-card,
-  #defi-cles .defi-card {
-    padding: 14px 16px;
+  /* 5) Harmoniser cartes et éviter toute largeur surprise */
+  .niveau-card, .defi-card {
+    margin: 8px 0 !important;
+    max-width: none !important;
   }
 }
+
+/* Ceinture et bretelles contre le débord horizontal */
+* { box-sizing: border-box; }
+html, body { overflow-x: hidden; }
+
 
