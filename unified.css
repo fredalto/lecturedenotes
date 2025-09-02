@@ -152,3 +152,26 @@ body {
 #level-steps .step.filled{background:#4CAF50}
 #level-steps .step.current{background:#4CAF50;transform:scale(1.22)}
 
+/* --- Corrections mobile --- */
+@media (max-width: 600px) {
+  /* Harmonise la carte "Niveau 5" avec les autres */
+  #niveaux .niveau-card:last-child {
+    grid-column: auto !important;
+    justify-self: stretch !important;
+    width: 100% !important;
+  }
+
+  /* Un peu plus de confort en grille sur petits écrans */
+  #cle-buttons,
+  #melange-cles {
+    grid-template-columns: repeat(2, 1fr) !important; /* au lieu de 4 colonnes serrées */
+    max-width: 420px !important;
+  }
+
+  /* Cartes plus régulières et faciles à toucher */
+  #niveaux .niveau-card,
+  #defi-cles .defi-card {
+    padding: 14px 16px;
+  }
+}
+
