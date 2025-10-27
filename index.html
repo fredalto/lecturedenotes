@@ -15,7 +15,7 @@
       <p>Choisissez un mode de jeu pour travailler la lecture de notes :</p>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:680px;margin:0 auto;">
         <button id="btn-cle" style="width:100%" onclick="choisirMode(this, 'cle')">Clé</button>
-        <button id="btn-melange" style="width:100%" onclick="choisirMode(this, 'melange')">Mélange</button>
+        <button id="btn-instrument" style="width:100%" onclick="choisirMode(this, 'instrument')">Instruments</button>
         <button id="btn-defi" style="width:100%" onclick="choisirMode(this, 'defi')">Défi</button>
       </div>
     </div>
@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <!-- SECTION NIVEAUX -->
+    <!-- SECTION NIVEAUX (pour le mode "Clé") -->
     <div id="etape-niveau" class="step-container fade hidden">
       <h3>Niveau de l'exercice</h3>
       <div id="niveaux"
@@ -74,18 +74,61 @@
       <button id="go-button" class="hidden" onclick="lancerExercice('cle')">On y va 🚀</button>
     </div>
 
-    <!-- SECTION MÉLANGE -->
-    <div id="etape-melange" class="step-container fade hidden">
-      <h3>Choisissez au moins deux clés</h3>
-      <p>Vous pouvez combiner Sol, Fa, Ut3 et Ut4 pour un entraînement varié !</p>
-      <div id="melange-cles"
-           style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:520px;margin:0 auto;">
-        <button style="width:100%;" onclick="toggleMelangeCle(this, 'sol')">Sol</button>
-        <button style="width:100%;" onclick="toggleMelangeCle(this, 'fa')">Fa</button>
-        <button style="width:100%;" onclick="toggleMelangeCle(this, 'ut3')">Ut3</button>
-        <button style="width:100%;" onclick="toggleMelangeCle(this, 'ut4')">Ut4</button>
+    <!-- ===== SECTION INSTRUMENTS (progressif : famille -> instrument -> niveaux) ===== -->
+    <div id="etape-instrument" class="step-container fade hidden">
+      <h3>Instruments</h3>
+      <p style="font-size:16px; line-height:1.6; max-width:800px;">
+        Ici, tu vas améliorer ton accent d’instrumentiste… mais n’oublie jamais que tu es musicien :
+        ta « langue » doit maîtriser <strong>toutes</strong> les clés 😉
+      </p>
+      <p style="font-size:14px; color:#444; max-width:800px; margin-top:6px;">
+        Chaque instrument a ses notes repères et ses doigtés : entraîne-toi par niveaux pour développer vitesse et précision.
+      </p>
+
+      <style>
+        /* Styles locaux, on ne touche pas unified.css */
+        .families-row, .instruments-row, .levels-row {
+          display:grid; gap:10px; max-width:900px; margin:14px auto 0;
+          grid-template-columns: repeat(1, minmax(0,1fr));
+        }
+        @media (min-width:640px){ .families-row,.instruments-row,.levels-row{ grid-template-columns:repeat(2,1fr);} }
+        @media (min-width:1024px){ .families-row,.instruments-row,.levels-row{ grid-template-columns:repeat(3,1fr);} }
+
+        .tile {
+          border:1px solid #e3e3e3; border-radius:14px; padding:14px;
+          background:#fff; box-shadow:0 2px 10px rgba(0,0,0,.04);
+          text-align:center; cursor:pointer; user-select:none;
+          transition:transform .14s ease, box-shadow .2s ease, border-color .2s ease;
+          font-weight:700;
+        }
+        .tile:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(0,0,0,.12); }
+        .tile.selected { border-color:#4CAF50; }
+        .tile.disabled { opacity:.5; cursor:not-allowed; }
+        .muted { font-size:13px; color:#666; font-weight:500; }
+
+        .levels-row .button { padding:10px 12px; font-weight:700; }
+        .hidden-soft { display:none; }
+      </style>
+
+      <!-- Étape 1 : familles -->
+      <h4 style="margin-top:18px;">1) Choisis une famille</h4>
+      <div class="families-row" role="listbox" aria-label="Familles d'instruments">
+        <div class="tile" role="option" tabindex="0" data-famille="cordes" onclick="selectFamille('cordes')">Cordes</div>
+        <div class="tile" role="option" tabindex="0" data-famille="bois"   onclick="selectFamille('bois')">Bois</div>
+        <div class="tile" role="option" tabindex="0" data-famille="vents"  onclick="selectFamille('vents')">Vents</div>
       </div>
-      <button id="go-button-melange" class="hidden" onclick="lancerMelange()">On y va 🚀</button>
+
+      <!-- Étape 2 : instruments (affiché après choix famille) -->
+      <div id="bloc-instruments" class="hidden-soft">
+        <h4 style="margin-top:18px;">2) Choisis un instrument</h4>
+        <div id="instruments-container" class="instruments-row" aria-label="Instruments"></div>
+      </div>
+
+      <!-- Étape 3 : niveaux (affiché après choix instrument) -->
+      <div id="bloc-niveaux" class="hidden-soft">
+        <h4 style="margin-top:18px;">3) Choisis ton niveau</h4>
+        <div id="levels-container" class="levels-row" aria-label="Niveaux"></div>
+      </div>
     </div>
 
     <!-- SECTION DÉFIS -->
@@ -140,157 +183,6 @@
     </div>
   </div>
 
-  <script>
-    let cleChoisie = '';
-    let niveauChoisi = 0;
-    let melangeCles = [];
-    let defiChoisi = '';
-
-    function showFadeSection(id) {
-      const el = document.getElementById(id);
-      el.classList.remove('hidden');
-      setTimeout(() => el.classList.add('show'), 10);
-    }
-
-    function hideAllFadeSections() {
-      document.querySelectorAll('.fade').forEach(el => {
-        el.classList.remove('show');
-        setTimeout(() => el.classList.add('hidden'), 300);
-      });
-    }
-
-    function choisirMode(button, mode) {
-      document.querySelectorAll('.mode-buttons button').forEach(btn => btn.classList.remove('selected'));
-      button.classList.add('selected');
-      hideAllFadeSections();
-      if (mode === 'cle') {
-        setTimeout(() => showFadeSection('etape-cle'), 300);
-      } else if (mode === 'melange') {
-        setTimeout(() => showFadeSection('etape-melange'), 300);
-      } else if (mode === 'defi') {
-        setTimeout(() => showFadeSection('etape-defi'), 300);
-      }
-    }
-
-    function setCle(button, cle) {
-      document.querySelectorAll('#cle-buttons button').forEach(btn => btn.classList.remove('selected'));
-      button.classList.add('selected');
-      cleChoisie = cle;
-      hideAllFadeSections();
-      setTimeout(() => showFadeSection('etape-cle'), 300);
-      setTimeout(() => showFadeSection('etape-niveau'), 600);
-    }
-
-    function selectNiveau(n) {
-      document.querySelectorAll('.niveau-card').forEach(card => card.classList.remove('selected'));
-      document.querySelectorAll('.niveau-card')[n - 1].classList.add('selected');
-      niveauChoisi = n;
-      document.getElementById('go-button').classList.remove('hidden');
-    }
-
-    // Défis
-    function selectDefi(el, cle) {
-      document.querySelectorAll('.defi-card').forEach(c => {
-        c.classList.remove('selected');
-        if (c.id === 'defi-ultime') {
-          c.style.backgroundColor = 'gold';
-          c.style.color = 'black';
-          c.style.fontWeight = 'bold';
-        }
-      });
-      el.classList.add('selected');
-      defiChoisi = cle;
-      if (el.id === 'defi-ultime') {
-        el.style.backgroundColor = 'gold';
-        el.style.color = 'black';
-        el.style.fontWeight = 'bold';
-      }
-      document.getElementById('go-button-defi').classList.remove('hidden');
-    }
-
-    function lancerDefiChoisi() {
-      const url = `defi_${defiChoisi}.html`;
-      window.location.href = url;
-      const cheminJS = `defi_${defiChoisi}.js`;
-      const script = document.createElement('script');
-      script.src = cheminJS;
-      script.onload = () => { console.log(`Script ${cheminJS} chargé.`); };
-      script.onerror = () => { alert("Erreur de chargement du fichier : " + cheminJS); };
-      document.body.appendChild(script);
-      alert(`Défi sélectionné : ${defiChoisi}`);
-    }
-
-    function toggleMelangeCle(button, cle) {
-      button.classList.toggle('selected');
-      if (melangeCles.includes(cle)) {
-        melangeCles = melangeCles.filter(c => c !== cle);
-      } else {
-        melangeCles.push(cle);
-      }
-      document.getElementById('go-button-melange').classList.toggle('hidden', melangeCles.length < 2);
-    }
-
-    function lancerExercice(type) {
-      const url = `${cleChoisie}_niveau${niveauChoisi}.html`;
-      window.location.href = url;
-      const cheminJS = `${cleChoisie}_niveau${niveauChoisi}.js`;
-      const script = document.createElement('script');
-      script.src = cheminJS;
-      script.onload = () => { console.log(`Script ${cheminJS} chargé.`); };
-      script.onerror = () => { alert("Erreur de chargement du fichier : " + cheminJS); };
-      document.body.appendChild(script);
-      alert(`Lancement d'un exercice (${type}) : clé ${cleChoisie}, niveau ${niveauChoisi}`);
-    }
-
-    // Effets hover / clic / cascade
-    function addCardHoverEffects(container) {
-      const cards = container.querySelectorAll('.niveau-card, .defi-card');
-      cards.forEach(card => {
-        card.addEventListener('mouseenter', () => {
-          card.style.transform = 'translateY(-2px)';
-          card.style.boxShadow = '0 8px 18px rgba(0,0,0,.12)';
-        });
-        card.addEventListener('mouseleave', () => {
-          card.style.transform = 'translateY(0)';
-          card.style.boxShadow = '';
-        });
-        card.addEventListener('mousedown', () => { card.style.transform = 'translateY(0)'; });
-        card.addEventListener('mouseup', () => { card.style.transform = 'translateY(-2px)'; });
-        card.setAttribute('tabindex', '0');
-        card.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') { card.click(); e.preventDefault(); }
-        });
-      });
-    }
-
-    function cascadeIn(container) {
-      const cards = container.querySelectorAll('.niveau-card, .defi-card');
-      cards.forEach((card, i) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(6px)';
-        card.style.transition = 'opacity .22s ease, transform .22s ease';
-        setTimeout(() => {
-          card.style.opacity = '1';
-          card.style.transform = '';
-        }, 60 + i * 40);
-      });
-    }
-
-    const _showFadeSection = showFadeSection;
-    showFadeSection = function(id){
-      _showFadeSection(id);
-      const el = document.getElementById(id);
-      setTimeout(() => {
-        addCardHoverEffects(el);
-        cascadeIn(el);
-      }, 20);
-    };
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const initialSections = document.querySelectorAll('.step-container:not(.hidden)');
-      initialSections.forEach(sec => { addCardHoverEffects(sec); cascadeIn(sec); });
-    });
-  </script>
+  <script src="index.js"></script>
 </body>
 </html>
-
