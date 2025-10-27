@@ -207,7 +207,7 @@ function showFinalScore() {
     goldButton.textContent = "Niveau 2";
     goldButton.className = "button gold-button";
     goldButton.onclick = () => {
-      window.location.href = "sol_niveau2.html";
+      window.location.href = "violon_niveau2.html";
     };
     endButtons.insertBefore(goldButton, endButtons.firstChild);
   }
