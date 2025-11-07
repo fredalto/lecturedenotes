@@ -37,62 +37,44 @@
       <h3>Niveau de l'exercice</h3>
       <div id="niveaux"
            style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;grid-auto-rows:1fr;align-items:stretch;">
-
-        <div class="niveau-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
-             onclick="selectNiveau(1)">
+        <div class="niveau-card" onclick="selectNiveau(1)">
           <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 1</strong>
           <span>Les notes repères</span>
         </div>
-
-        <div class="niveau-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
-             onclick="selectNiveau(2)">
+        <div class="niveau-card" onclick="selectNiveau(2)">
           <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 2</strong>
-          <span>Les notes repères et leurs notes conjointes</span>
+          <span>Repères + conjointes</span>
         </div>
-
-        <div class="niveau-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
-             onclick="selectNiveau(3)">
+        <div class="niveau-card" onclick="selectNiveau(3)">
           <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 3</strong>
-          <span>Les notes repères et leurs tierces</span>
+          <span>Repères + tierces</span>
         </div>
-
-        <div class="niveau-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
-             onclick="selectNiveau(4)">
+        <div class="niveau-card" onclick="selectNiveau(4)">
           <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 4</strong>
-          <span>Les notes repères + conjointes + tierces</span>
+          <span>Repères + conjointes + tierces</span>
         </div>
-
-        <div class="niveau-card"
-             style="margin:0;line-height:1.35;grid-column:1 / -1;justify-self:center;width:min(100%,420px);
-                    will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
-             onclick="selectNiveau(5)">
+        <div class="niveau-card" style="grid-column:1 / -1;justify-self:center;width:min(100%,420px);" onclick="selectNiveau(5)">
           <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 5</strong>
           <span>Toutes les notes</span>
         </div>
       </div>
-
       <button id="go-button" class="hidden" onclick="lancerExercice('cle')">On y va 🚀</button>
     </div>
 
-    <!-- ===== SECTION INSTRUMENTS (progressif : famille -> instrument -> niveaux) ===== -->
+    <!-- ===== INSTRUMENTS (famille -> sous-famille -> instrument -> niveaux) ===== -->
     <div id="etape-instrument" class="step-container fade hidden">
       <h3>Instruments</h3>
       <p style="font-size:16px; line-height:1.6; max-width:800px;">
-        Ici, tu vas améliorer ton accent d’instrumentiste… mais n’oublie jamais que tu es musicien :
-        ta « langue » doit maîtriser <strong>toutes</strong> les clés 😉
-      </p>
-      <p style="font-size:14px; color:#444; max-width:800px; margin-top:6px;">
-        Chaque instrument a ses notes repères et ses doigtés : entraîne-toi par niveaux pour développer vitesse et précision.
+        Choisis une famille, puis une <strong>sous-famille</strong>, puis ton instrument.
       </p>
 
       <style>
-        /* Styles locaux, on ne touche pas unified.css */
-        .families-row, .instruments-row, .levels-row {
+        .families-row, .subfamilies-row, .instruments-row, .levels-row {
           display:grid; gap:10px; max-width:900px; margin:14px auto 0;
           grid-template-columns: repeat(1, minmax(0,1fr));
         }
-        @media (min-width:640px){ .families-row,.instruments-row,.levels-row{ grid-template-columns:repeat(2,1fr);} }
-        @media (min-width:1024px){ .families-row,.instruments-row,.levels-row{ grid-template-columns:repeat(3,1fr);} }
+        @media (min-width:640px){ .families-row,.subfamilies-row,.instruments-row,.levels-row{ grid-template-columns:repeat(2,1fr);} }
+        @media (min-width:1024px){ .families-row,.subfamilies-row,.instruments-row,.levels-row{ grid-template-columns:repeat(3,1fr);} }
 
         .tile {
           border:1px solid #e3e3e3; border-radius:14px; padding:14px;
@@ -104,29 +86,52 @@
         .tile:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(0,0,0,.12); }
         .tile.selected { border-color:#4CAF50; }
         .tile.disabled { opacity:.5; cursor:not-allowed; }
-        .muted { font-size:13px; color:#666; font-weight:500; }
 
-        .levels-row .button { padding:10px 12px; font-weight:700; }
+        .levels-row .button.level {
+          display:inline-block; text-align:center; border-radius:999px;
+          padding:10px 16px; font-weight:800; border:1px solid #cfd6dc;
+          background: linear-gradient(180deg,#ffffff,#f5f7f9);
+          box-shadow: 0 1px 0 rgba(0,0,0,.04), inset 0 0 0 1px rgba(255,255,255,.6);
+          transition: transform .08s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease;
+        }
+        .levels-row .button.level:hover {
+          transform: translateY(-1px); box-shadow: 0 6px 14px rgba(0,0,0,.12);
+          background: linear-gradient(180deg,#ffffff,#eef2f6); border-color:#b9c2c9;
+        }
+        .levels-row .button.level:active {
+          transform: translateY(0); box-shadow: 0 2px 8px rgba(0,0,0,.12) inset;
+        }
+        .levels-row .button.level.disabled {
+          opacity:.5; cursor:not-allowed; background:#f4f6f8;
+          box-shadow:none; border-color:#e3e6ea;
+        }
+
         .hidden-soft { display:none; }
       </style>
 
       <!-- Étape 1 : familles -->
       <h4 style="margin-top:18px;">1) Choisis une famille</h4>
       <div class="families-row" role="listbox" aria-label="Familles d'instruments">
-        <div class="tile" role="option" tabindex="0" data-famille="cordes" onclick="selectFamille('cordes')">Cordes</div>
-        <div class="tile" role="option" tabindex="0" data-famille="bois"   onclick="selectFamille('bois')">Bois</div>
-        <div class="tile" role="option" tabindex="0" data-famille="vents"  onclick="selectFamille('vents')">Vents</div>
+        <div class="tile" role="option" tabindex="0" data-famille="cordes"              onclick="selectFamille('cordes')">🎻 Cordes</div>
+        <div class="tile" role="option" tabindex="0" data-famille="vents"                onclick="selectFamille('vents')">🌬️ Vents</div>
+        <div class="tile" role="option" tabindex="0" data-famille="claviers-soufflets"   onclick="selectFamille('claviers-soufflets')">🎹 Claviers & Soufflets</div>
       </div>
 
-      <!-- Étape 2 : instruments (affiché après choix famille) -->
+      <!-- Étape 2 : sous-familles -->
+      <div id="bloc-sousfamilles" class="hidden-soft">
+        <h4 style="margin-top:18px;">2) Choisis une sous-famille</h4>
+        <div id="sousfamilles-container" class="subfamilies-row" aria-label="Sous-familles"></div>
+      </div>
+
+      <!-- Étape 3 : instruments -->
       <div id="bloc-instruments" class="hidden-soft">
-        <h4 style="margin-top:18px;">2) Choisis un instrument</h4>
+        <h4 style="margin-top:18px;">3) Choisis un instrument</h4>
         <div id="instruments-container" class="instruments-row" aria-label="Instruments"></div>
       </div>
 
-      <!-- Étape 3 : niveaux (affiché après choix instrument) -->
+      <!-- Étape 4 : niveaux / exercice -->
       <div id="bloc-niveaux" class="hidden-soft">
-        <h4 style="margin-top:18px;">3) Choisis ton niveau</h4>
+        <h4 style="margin-top:18px;">4) Choisis ton niveau</h4>
         <div id="levels-container" class="levels-row" aria-label="Niveaux"></div>
       </div>
     </div>
@@ -134,51 +139,29 @@
     <!-- SECTION DÉFIS -->
     <div id="etape-defi" class="step-container fade hidden">
       <h3>Relève ton défi !</h3>
-
       <div id="defi-cles"
            style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;grid-auto-rows:1fr;align-items:stretch;">
-
-        <div class="defi-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
-             onclick="selectDefi(this, 'sol')">
+        <div class="defi-card" onclick="selectDefi(this, 'sol')">
           <strong style="display:block;text-align:center;margin-bottom:6px;">Défi Sol</strong>
           <span>Deviens le roi de la clé de Sol !</span>
         </div>
-
-        <div class="defi-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
-             onclick="selectDefi(this, 'fa')">
+        <div class="defi-card" onclick="selectDefi(this, 'fa')">
           <strong style="display:block;text-align:center;margin-bottom:6px;">Défi Fa</strong>
           <span>Maîtrise les notes graves comme un·e pro !</span>
         </div>
-
-        <div class="defi-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
-             onclick="selectDefi(this, 'ut3')">
+        <div class="defi-card" onclick="selectDefi(this, 'ut3')">
           <strong style="display:block;text-align:center;margin-bottom:6px;">Défi Ut3</strong>
           <span>Prouve que tu domines l’alto !</span>
         </div>
-
-        <div class="defi-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
-             onclick="selectDefi(this, 'ut4')">
+        <div class="defi-card" onclick="selectDefi(this, 'ut4')">
           <strong style="display:block;text-align:center;margin-bottom:6px;">Défi Ut4</strong>
           <span>Pour les fans de la clé de ténor !</span>
         </div>
-
-        <div class="defi-card" style="margin:0;line-height:1.35;will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
-             onclick="selectDefi(this, 'solfa')">
-          <strong style="display:block;text-align:center;margin-bottom:6px;">Défi Sol + Fa</strong>
-          <span>Lecture bimanuelle activée !</span>
-        </div>
-
-        <!-- DÉFI ULTIME DORÉ -->
-        <div id="defi-ultime" class="defi-card"
-             style="margin:0;line-height:1.35;display:flex;flex-direction:column;justify-content:center;
-                    background-color:gold;color:black;font-weight:bold;
-                    will-change:transform,box-shadow;transition:transform .14s ease, box-shadow .2s ease;"
-             onclick="selectDefi(this, 'ultime')">
+        <div id="defi-ultime" class="defi-card" style="background-color:gold;color:black;font-weight:bold;" onclick="selectDefi(this, 'ultime')">
           <strong style="display:block;text-align:center;margin-bottom:6px;">Défi Ultime</strong>
           <span>Le dieu de la lecture de notes, c’est toi ?</span>
         </div>
       </div>
-
       <button id="go-button-defi" class="hidden" onclick="lancerDefiChoisi()">On y va 🚀</button>
     </div>
   </div>
