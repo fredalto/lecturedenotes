@@ -33,33 +33,34 @@
     </div>
 
     <!-- SECTION NIVEAUX (pour le mode "Clé") -->
-    <div id="etape-niveau" class="step-container fade hidden">
-      <h3>Niveau de l'exercice</h3>
-      <div id="niveaux"
-           style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;grid-auto-rows:1fr;align-items:stretch;">
-        <div class="niveau-card" onclick="selectNiveau(1)">
-          <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 1</strong>
-          <span>Les notes repères</span>
-        </div>
-        <div class="niveau-card" onclick="selectNiveau(2)">
-          <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 2</strong>
-          <span>Repères + conjointes</span>
-        </div>
-        <div class="niveau-card" onclick="selectNiveau(3)">
-          <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 3</strong>
-          <span>Repères + tierces</span>
-        </div>
-        <div class="niveau-card" onclick="selectNiveau(4)">
-          <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 4</strong>
-          <span>Repères + conjointes + tierces</span>
-        </div>
-        <div class="niveau-card" style="grid-column:1 / -1;justify-self:center;width:min(100%,420px);" onclick="selectNiveau(5)">
-          <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 5</strong>
-          <span>Toutes les notes</span>
-        </div>
-      </div>
-      <button id="go-button" class="hidden" onclick="lancerExercice()">On y va 🚀</button>
+<div id="etape-niveau" class="step-container fade hidden">
+  <h3>Niveau de l'exercice</h3>
+  <div id="niveaux"
+       style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;grid-auto-rows:1fr;align-items:stretch;">
+    <div class="niveau-card" onclick="selectNiveau(1)">
+      <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 1</strong>
+      <span>Les notes repères</span>
     </div>
+    <div class="niveau-card" onclick="selectNiveau(2)">
+      <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 2</strong>
+      <span>Repères + conjointes</span>
+    </div>
+    <div class="niveau-card" onclick="selectNiveau(3)">
+      <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 3</strong>
+      <span>Repères + tierces</span>
+    </div>
+    <div class="niveau-card" onclick="selectNiveau(4)">
+      <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 4</strong>
+      <span>Repères + conjointes + tierces</span>
+    </div>
+    <div class="niveau-card" style="grid-column:1 / -1;justify-self:center;width:min(100%,420px);" onclick="selectNiveau(5)">
+      <strong style="display:block;text-align:center;margin-bottom:6px;">Niveau 5</strong>
+      <span>Toutes les notes</span>
+    </div>
+  </div>
+  <button id="go-button" type="button" class="hidden" onclick="lancerExercice()">On y va 🚀</button>
+</div>
+
 
     <!-- ===== INSTRUMENTS (famille -> sous-famille -> instrument -> niveaux) ===== -->
     <div id="etape-instrument" class="step-container fade hidden">
