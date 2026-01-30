@@ -15,10 +15,12 @@ let quizNotes = [];
 let lastNoteImage = "";
 let isWaiting = false;
 let showFingering = false; // état du toggle
+let showRainbow = false; // Notes arc-en-ciel
 
 const startButton = document.getElementById("start-quiz");
 const quizSection = document.getElementById("quiz-section");
 const noteImage = document.getElementById("note-image");
+const noteFrame = document.getElementById("note-frame");
 const gameContainer = document.getElementById("game-container");
 const feedback = document.getElementById("feedback");
 const progressBar = document.getElementById("progress-bar");
@@ -26,6 +28,7 @@ const scoreDisplay = document.getElementById("score-display");
 const endButtons = document.getElementById("end-buttons");
 const fingeringBadge = document.getElementById("fingering-badge");
 const toggleFingering = document.getElementById("toggle-fingering");
+const toggleRainbow = document.getElementById("toggle-rainbow");
 
 startButton.addEventListener("click", startQuiz);
 
@@ -39,6 +42,13 @@ if (toggleFingering) {
       updateFingeringBadge(n);
     }
   });
+
+toggleRainbow.addEventListener("change", () => {
+  showRainbow = toggleRainbow.checked;
+  // met à jour immédiatement l’affichage sur la note en cours
+  const currentNote = quizNotes[currentQuestion];
+  updateRainbowBar(currentNote);
+});
 }
 
 function startQuiz() {
@@ -99,6 +109,7 @@ function loadNextQuestion() {
 
   // Met à jour le badge de doigté (affiché uniquement si le toggle est actif)
   updateFingeringBadge(currentNote);
+  updateRainbowBar(currentNote);
 
   gameContainer.innerHTML = "";
   feedback.textContent = "";
@@ -123,6 +134,60 @@ function updateFingeringBadge(note) {
     fingeringBadge.style.display = "none";
   }
 }
+
+
+function normalizeNoteName(n) {
+  return (n || "")
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // retire accents
+    .replace(/\s+/g, "")
+    .replace("ré", "re");
+}
+
+// Mapping Boomwhackers (Do à Si)
+function getRainbowColor(noteName) {
+  const n = normalizeNoteName(noteName);
+  const map = {
+    // Couleurs un peu plus sombres (proches Boomwhackers)
+    "do":  "#c62828", // rouge
+    "re":  "#ef6c00", // orange
+    "mi":  "#f9a825", // jaune
+    "fa":  "#7cb342", // vert clair
+    "sol": "#2e7d32", // vert
+    "la":  "#6a1b9a", // violet
+    "si":  "#ad1457"  // rose
+  };
+  return map[n] || "#9e9e9e";
+}
+
+function hexToRgba(hex, a) {
+  const h = (hex || "#000000").replace("#","").trim();
+  const full = h.length === 3 ? h.split("").map(c=>c+c).join("") : h.padEnd(6,"0");
+  const r = parseInt(full.slice(0,2),16);
+  const g = parseInt(full.slice(2,4),16);
+  const b = parseInt(full.slice(4,6),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+function updateRainbowBar(noteObj) {
+  /* Notes arc-en-ciel : uniquement le cadre, sans soulignement */
+  if (!noteFrame) return;
+
+  if (!showRainbow || !noteObj) {
+    noteFrame.classList.remove("rainbow-on");
+    noteFrame.style.removeProperty("--rainbow-color");
+    noteFrame.style.removeProperty("--rainbow-glow");
+    return;
+  }
+
+  const base = getRainbowColor(noteObj.nom);
+
+  // Cadre coloré autour de la note
+  noteFrame.style.setProperty("--rainbow-color", base);
+  noteFrame.style.setProperty("--rainbow-glow", hexToRgba(base, 0.35));
+  noteFrame.classList.add("rainbow-on");
+}
+
 
 function playSound(filename) {
   const audio = new Audio(`sounds/${filename}`);
