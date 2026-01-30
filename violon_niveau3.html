@@ -30,6 +30,26 @@
     .toggle-label { font-size: 14px; color: #333; user-select: none; }
     /* Badge doigté au-dessus de la note */
     .note-display { position: relative; display: inline-block; }
+
+    /* Cadre autour de l’image de note (utile pour “Notes arc-en-ciel”) */
+    .note-frame{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 18px;
+      border: 3px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.85);
+      box-shadow: 0 10px 22px rgba(0,0,0,.08);
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .note-frame.rainbow-on{
+      border-color: var(--rainbow-color, rgba(0,0,0,.22));
+      box-shadow:
+        0 10px 22px rgba(0,0,0,.10),
+        0 0 0 5px rgba(0,0,0,.04),
+        0 0 0 7px var(--rainbow-glow, rgba(0,0,0,.10));
+    }
     #fingering-badge {
       position: absolute; top: -6px; left: 50%; transform: translate(-50%,-100%);
       display: none; align-items: center; justify-content: center;
@@ -71,6 +91,9 @@
       <p style="margin-top: 10px; font-size: 14px; color: #555;">
         💡 Astuce : Clavier activé (C=Do, D=Ré, E=Mi, F=Fa, G=Sol, A=La, B=Si)
       </p>
+      <p style="margin-top: 8px; font-size: 14px; color: #555;">
+        🌈 <strong>Notes arc-en-ciel</strong> : pendant le quiz, active cette option pour voir un <strong>cadre coloré</strong> qui correspond à la note, selon le code couleur des boomwhackers.
+      </p>
     </div>
 
     <div id="quiz-section" style="display: none;">
@@ -81,12 +104,19 @@
           <span class="slider"></span>
         </label>
         <span class="toggle-label">Afficher le doigté</span>
+      
+        <label class="switch" title="Afficher/masquer Notes arc-en-ciel">
+          <input id="toggle-rainbow" type="checkbox" />
+          <span class="slider"></span>
+        </label>
+        <span class="toggle-label">Notes arc-en-ciel</span>
       </div>
 
       <div id="note-display" class="note-display">
         <div id="fingering-badge">0</div>
-        <img alt="Note" id="note-image" src=""/>
-      </div>
+        <div id="note-frame" class="note-frame">
+          <img alt="Note" id="note-image" src=""/>
+        </div></div>
       <div id="game-container"></div>
       <div id="feedback"></div>
       <div id="progress-container"><div id="progress-bar"></div></div>
